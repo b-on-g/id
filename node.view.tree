@@ -1,0 +1,147 @@
+$mol_scroll $mol_view
+	scroll_top? 0
+	scroll_left? 0
+	attr *
+		^
+		tabindex <= tabindex -1
+	event *
+		^
+		scroll? <=> event_scroll? null
+
+$mol_page $mol_view
+	dom_name \article
+	attr *
+		^
+		tabIndex <= tabindex -1
+	sub /
+		<= Head $mol_view
+			minimal_height 64
+			dom_name \header
+			sub <= head /
+				<= Title $mol_view
+					dom_name \h1
+					sub <= title_content /
+						<= Logo null
+						<= title
+				<= Tools $mol_view
+					sub <= tools /$mol_view_content
+		<= Body $mol_scroll
+			scroll_top? => body_scroll_top?
+			sub <= body_content /
+				<= Body_content $mol_view
+					sub <= body /$mol_view
+		<= Foot $mol_view
+			dom_name \footer
+			sub <= foot /$mol_view
+
+$mol_theme_auto $mol_plugin
+	light \$mol_theme_light
+	attr * mol_theme <= theme <= dark \$mol_theme_dark
+
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit +Infinity
+	row_width 0
+	sub / <= title
+
+$mol_speck $mol_view
+	theme \$mol_theme_accent
+	sub /
+		<= value null
+
+$mol_button $mol_view
+	enabled true
+	click? null
+	event_click? null
+	status? /
+	event *
+		^
+		click? <=> activate? <=> event_activate? null
+		dblclick? <=> clicks? null
+		keydown? <=> key_press? <=> event_key_press? null
+	attr *
+		^
+		disabled <= disabled false
+		role \button
+		tabindex <= tab_index 0
+		title <= hint_safe <= hint \
+	sub /$mol_view_content
+		<= title
+	Speck $mol_speck
+		value <= error \
+
+$mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
+
+$mol_button_minor $mol_button_typed
+
+$mol_button_major $mol_button_minor
+	theme \$mol_theme_base
+
+$mol_row $mol_view
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0.1
+	sub <= rows /$mol_view
+		<= Gap_before $mol_view style * paddingTop <= gap_before 0
+		<= Empty $mol_view
+		<= Gap_after $mol_view style * paddingTop <= gap_after 0
+	item_height_min* 1
+	item_width_min* 1
+	view_window_shift? 0
+	view_window /
+		0
+		0
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
+$bog_id_app $mol_page
+	title @ \Гипер ID
+	plugins /
+		<= Theme $mol_theme_auto
+	body /
+		<= Consent $mol_list
+			rows /
+				<= Consent_text $mol_paragraph
+					title <= consent_text \
+				<= Consent_tools $mol_row
+					sub /
+						<= Approve $mol_button_major
+							title @ \Разрешить
+							enabled <= approve_enabled true
+							click? <=> approve? null
+						<= Reject $mol_button_minor
+							title @ \Отклонить
+							click? <=> reject? null
+		<= Lord_label $mol_labeler
+			title @ \Ваш лорд
+			content /
+				<= Lord $mol_paragraph
+					title <= lord \
+		<= Grants_label $mol_labeler
+			title @ \Подключённые приложения
+			content /
+				<= Grants $mol_list
+					rows <= grant_rows /
+						<= Grant* $mol_row
+							sub /
+								<= Grant_origin* $mol_paragraph
+									title <= grant_origin* \
+								<= Grant_scope* $mol_paragraph
+									title <= grant_scope* \
+								<= Grant_revoke* $mol_button_minor
+									title @ \Отозвать
+									enabled <= grant_active* true
+									click? <=> grant_revoke*? null
+	consent_template @ \{origin} просит доступ «{scope}»

@@ -1,0 +1,9 @@
+{
+	"$bog_id_app_Approve_title": "Разрешить",
+	"$bog_id_app_Grant_revoke_title": "Отозвать",
+	"$bog_id_app_Grants_label_title": "Подключённые приложения",
+	"$bog_id_app_Lord_label_title": "Ваш лорд",
+	"$bog_id_app_Reject_title": "Отклонить",
+	"$bog_id_app_consent_template": "{origin} просит доступ «{scope}»",
+	"$bog_id_app_title": "Гипер ID"
+}
