@@ -251,6 +251,7 @@
     "$giper_baza_mine_fs",
     "$mol_bus",
     "$mol_reconcile",
+    "$bog_id_profile",
     "$mol_page",
     "$mol_view_view",
     "$mol_view",

@@ -45181,6 +45181,11 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    /** Public Giper ID profile of Lord, stored under own key in home Land */
+    function $bog_id_profile_of(this: $, lord: string, auto?: 'auto'): $bog_id_profile | null;
+}
+
+declare namespace $ {
     const $bog_id_grant_base: Omit<typeof $giper_baza_dict, "prototype"> & {
         new (...args: any[]): $mol_type_override<$giper_baza_dict, {
             readonly App: (auto?: any) => $giper_baza_atom_text | null;
@@ -46121,6 +46126,7 @@ declare namespace $.$$ {
         note(next?: string): string;
         tier(): $giper_baza_rank_tier | null;
         note_enabled(): boolean;
+        user_name(): string;
         status(): string;
     }
 }

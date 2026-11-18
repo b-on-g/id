@@ -13852,6 +13852,19 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Public Giper ID profile of Lord, stored under own key in home Land */
+    function $bog_id_profile_of(lord, auto) {
+        return this.$giper_baza_glob.Land(new $giper_baza_link(lord))
+            .Data($giper_baza_dict)
+            .dive('bog_id', $bog_id_profile, auto);
+    }
+    $.$bog_id_profile_of = $bog_id_profile_of;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $bog_id_grant extends $giper_baza_dict.with({
         App: $giper_baza_atom_text,
         Scope: $giper_baza_atom_text,
@@ -17017,17 +17030,19 @@ var $;
             glob() {
                 return this.$.$giper_baza_glob;
             }
-            profile() {
-                return this.glob().home().land().Data($bog_id_profile);
+            profile(auto) {
+                return this.$.$bog_id_profile_of(this.lord(), auto);
             }
             lord() {
                 return this.$.$giper_baza_auth.current().pass().lord().str;
             }
             name(next) {
-                return this.profile().Name(next)?.val(next) ?? '';
+                if (next === undefined)
+                    return this.profile()?.Name()?.val() ?? '';
+                return this.profile('auto').Name('auto').val(next) ?? '';
             }
             stores() {
-                return (this.profile().Stores()?.items() ?? [])
+                return (this.profile()?.Stores()?.items() ?? [])
                     .map(link => this.glob().Land(new $giper_baza_link(String(link))).Data($bog_id_store));
             }
             store_ensure() {
@@ -17035,7 +17050,7 @@ var $;
                 if (found)
                     return found;
                 const land = this.glob().land_grab([[null, $giper_baza_rank_deny]]);
-                this.profile().Stores('auto').add(land.link().str);
+                this.profile('auto').Stores('auto').add(land.link().str);
                 return land.Data($bog_id_store);
             }
             grants() {
@@ -17264,10 +17279,12 @@ var $;
                 $mol_wire_async(this).rotate(id, [pass]);
             }
             vault(next) {
-                return this.profile().Vault(next)?.val(next) ?? '';
+                if (next === undefined)
+                    return this.profile()?.Vault()?.val() ?? '';
+                return this.profile('auto').Vault('auto').val(next) ?? '';
             }
             vault_of(lord) {
-                return this.glob().Land(new $giper_baza_link(lord)).Data($bog_id_profile).Vault()?.val() ?? '';
+                return this.$.$bog_id_profile_of(lord)?.Vault()?.val() ?? '';
             }
             passkey_salt() {
                 return new Uint8Array($mol_charset_encode('bog_id'));
@@ -23973,6 +23990,8 @@ var $;
                 ask(two);
                 const second = await $mol_wire_async(app).grant_save();
                 $mol_assert_equal(first.name, 'Кирилл');
+                $mol_assert_equal($.$bog_id_profile_of(app.lord())?.Name()?.val(), 'Кирилл');
+                $mol_assert_equal($.$giper_baza_glob.home().land().Data($bog_id_profile).Name()?.val() ?? '', '');
                 $mol_assert_equal(second.pointer, first.pointer);
                 $mol_assert_equal(app.grants().length, 1);
                 const grant = app.grants()[0];

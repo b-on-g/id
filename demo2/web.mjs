@@ -30793,6 +30793,19 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Public Giper ID profile of Lord, stored under own key in home Land */
+    function $bog_id_profile_of(lord, auto) {
+        return this.$giper_baza_glob.Land(new $giper_baza_link(lord))
+            .Data($giper_baza_dict)
+            .dive('bog_id', $bog_id_profile, auto);
+    }
+    $.$bog_id_profile_of = $bog_id_profile_of;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $bog_id_grant extends $giper_baza_dict.with({
         App: $giper_baza_atom_text,
         Scope: $giper_baza_atom_text,
@@ -31153,12 +31166,18 @@ var $;
             note_enabled() {
                 return (this.tier() ?? $giper_baza_rank_tier.deny) >= $giper_baza_rank_tier.post;
             }
+            user_name() {
+                const grant = this.grant();
+                if (!grant)
+                    return '';
+                return this.$.$bog_id_profile_of(grant.lord)?.Name()?.val() || grant.name || grant.lord;
+            }
             status() {
                 const grant = this.grant();
                 if (!grant?.pointer)
                     return this.status_out();
                 return this.status_in()
-                    .replace('{name}', grant.name || grant.lord)
+                    .replace('{name}', this.user_name())
                     .replace('{tier}', $giper_baza_rank_tier[this.tier() ?? 0]);
             }
         }
