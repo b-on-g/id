@@ -45183,22 +45183,24 @@ declare namespace $.$$ {
 declare namespace $ {
     const $bog_id_grant_base: Omit<typeof $giper_baza_dict, "prototype"> & {
         new (...args: any[]): $mol_type_override<$giper_baza_dict, {
-            readonly Origin: (auto?: any) => $giper_baza_atom_text | null;
+            readonly App: (auto?: any) => $giper_baza_atom_text | null;
             readonly Scope: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Pointer: (auto?: any) => $giper_baza_atom_text | null;
             readonly Land: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Lands: (auto?: any) => $giper_baza_list_str | null;
             readonly Apps: (auto?: any) => $giper_baza_list_str | null;
-            readonly Revoked: (auto?: any) => $giper_baza_atom_bool | null;
         }>;
         path: string;
     } & {
         schema: {
             [x: string]: typeof $giper_baza_pawn;
         } & {
-            readonly Origin: typeof $giper_baza_atom_text;
+            readonly App: typeof $giper_baza_atom_text;
             readonly Scope: typeof $giper_baza_atom_text;
+            readonly Pointer: typeof $giper_baza_atom_text;
             readonly Land: typeof $giper_baza_atom_text;
+            readonly Lands: typeof $giper_baza_list_str;
             readonly Apps: typeof $giper_baza_list_str;
-            readonly Revoked: typeof $giper_baza_atom_bool;
         };
     };
     export class $bog_id_grant extends $bog_id_grant_base {
@@ -45953,6 +45955,24 @@ declare namespace $ {
     };
     export class $bog_id_store extends $bog_id_store_base {
     }
+    const $bog_id_profile_base: Omit<typeof $giper_baza_dict, "prototype"> & {
+        new (...args: any[]): $mol_type_override<$giper_baza_dict, {
+            readonly Name: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Vault: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Stores: (auto?: any) => $giper_baza_list_str | null;
+        }>;
+        path: string;
+    } & {
+        schema: {
+            [x: string]: typeof $giper_baza_pawn;
+        } & {
+            readonly Name: typeof $giper_baza_atom_text;
+            readonly Vault: typeof $giper_baza_atom_text;
+            readonly Stores: typeof $giper_baza_list_str;
+        };
+    };
+    export class $bog_id_profile extends $bog_id_profile_base {
+    }
     export {};
 }
 
@@ -46009,10 +46029,16 @@ declare namespace $ {
 declare namespace $ {
     type $bog_id_login_grant = {
         lord: string;
-        land: string;
+        name: string;
+        pointer: string;
     };
-    /** Opens Giper ID popup, sends app Pass and resolves with granted Land */
+    /** Opens Giper ID popup, sends app Pass and resolves with Pointer to granted Land */
     function $bog_id_login(provider: string, pass: string, scope: string): Promise<$bog_id_login_grant>;
+}
+
+declare namespace $ {
+    /** Resolves Pointer from Giper ID grant to current data Land */
+    function $bog_id_land(this: $, pointer: string): $giper_baza_land | null;
 }
 
 declare namespace $ {

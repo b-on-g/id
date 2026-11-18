@@ -30794,11 +30794,12 @@ var $;
 var $;
 (function ($) {
     class $bog_id_grant extends $giper_baza_dict.with({
-        Origin: $giper_baza_atom_text,
+        App: $giper_baza_atom_text,
         Scope: $giper_baza_atom_text,
+        Pointer: $giper_baza_atom_text,
         Land: $giper_baza_atom_text,
+        Lands: $giper_baza_list_str,
         Apps: $giper_baza_list_str,
-        Revoked: $giper_baza_atom_bool,
     }) {
     }
     $.$bog_id_grant = $bog_id_grant;
@@ -30807,6 +30808,13 @@ var $;
     }) {
     }
     $.$bog_id_store = $bog_id_store;
+    class $bog_id_profile extends $giper_baza_dict.with({
+        Name: $giper_baza_atom_text,
+        Vault: $giper_baza_atom_text,
+        Stores: $giper_baza_list_str,
+    }) {
+    }
+    $.$bog_id_profile = $bog_id_profile;
 })($ || ($ = {}));
 
 ;
@@ -30951,6 +30959,11 @@ var $;
 			(obj.title) = () => ((this.consent_text()));
 			return obj;
 		}
+		Consent_self(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Consent_self_title")));
+			return obj;
+		}
 		approve_enabled(){
 			return true;
 		}
@@ -30980,9 +30993,32 @@ var $;
 			(obj.sub) = () => ([(this.Approve()), (this.Reject())]);
 			return obj;
 		}
+		consent_rows(){
+			return [
+				(this.Consent_text()), 
+				(this.Consent_self()), 
+				(this.Consent_tools())
+			];
+		}
 		Consent(){
 			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ([(this.Consent_text()), (this.Consent_tools())]);
+			(obj.rows) = () => ((this.consent_rows()));
+			return obj;
+		}
+		name(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		Name(){
+			const obj = new this.$.$mol_string();
+			(obj.hint) = () => ((this.$.$mol_locale.text("$bog_id_app_Name_hint")));
+			(obj.value) = (next) => ((this.name(next)));
+			return obj;
+		}
+		Name_label(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Name_label_title")));
+			(obj.content) = () => ([(this.Name())]);
 			return obj;
 		}
 		lord(){
@@ -30999,20 +31035,54 @@ var $;
 			(obj.content) = () => ([(this.Lord())]);
 			return obj;
 		}
-		grant_origin(id){
-			return "";
+		passkey_bind_title(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_bind_title"));
 		}
-		Grant_origin(id){
-			const obj = new this.$.$mol_paragraph();
-			(obj.title) = () => ((this.grant_origin(id)));
+		passkey_bind(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Passkey_bind(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.title) = () => ((this.passkey_bind_title()));
+			(obj.click) = (next) => ((this.passkey_bind(next)));
 			return obj;
 		}
-		grant_scope(id){
+		passkey_enter(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Passkey_enter(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Passkey_enter_title")));
+			(obj.click) = (next) => ((this.passkey_enter(next)));
+			return obj;
+		}
+		Passkey_tools(){
+			const obj = new this.$.$mol_row();
+			(obj.sub) = () => ([(this.Passkey_bind()), (this.Passkey_enter())]);
+			return obj;
+		}
+		passkey_status(){
 			return "";
 		}
-		Grant_scope(id){
+		Passkey_status(){
 			const obj = new this.$.$mol_paragraph();
-			(obj.title) = () => ((this.grant_scope(id)));
+			(obj.title) = () => ((this.passkey_status()));
+			return obj;
+		}
+		Passkey_label(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Passkey_label_title")));
+			(obj.content) = () => ([(this.Passkey_tools()), (this.Passkey_status())]);
+			return obj;
+		}
+		grant_title(id){
+			return "";
+		}
+		Grant_title(id){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.grant_title(id)));
 			return obj;
 		}
 		grant_active(id){
@@ -31029,13 +31099,40 @@ var $;
 			(obj.click) = (next) => ((this.grant_revoke(id, next)));
 			return obj;
 		}
-		Grant(id){
+		Grant_head(id){
 			const obj = new this.$.$mol_row();
-			(obj.sub) = () => ([
-				(this.Grant_origin(id)), 
-				(this.Grant_scope(id)), 
-				(this.Grant_revoke(id))
-			]);
+			(obj.sub) = () => ([(this.Grant_title(id)), (this.Grant_revoke(id))]);
+			return obj;
+		}
+		app_title(id){
+			return "";
+		}
+		App_title(id){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.app_title(id)));
+			return obj;
+		}
+		app_revoke(id, next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		App_revoke(id){
+			const obj = new this.$.$mol_button_minor();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_App_revoke_title")));
+			(obj.click) = (next) => ((this.app_revoke(id, next)));
+			return obj;
+		}
+		App(id){
+			const obj = new this.$.$mol_row();
+			(obj.sub) = () => ([(this.App_title(id)), (this.App_revoke(id))]);
+			return obj;
+		}
+		grant_parts(id){
+			return [(this.Grant_head(id)), (this.App(id))];
+		}
+		Grant(id){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ((this.grant_parts(id)));
 			return obj;
 		}
 		grant_rows(){
@@ -31061,32 +31158,153 @@ var $;
 		body(){
 			return [
 				(this.Consent()), 
+				(this.Name_label()), 
 				(this.Lord_label()), 
+				(this.Passkey_label()), 
 				(this.Grants_label())
 			];
 		}
 		consent_template(){
 			return (this.$.$mol_locale.text("$bog_id_app_consent_template"));
 		}
+		grant_template(){
+			return (this.$.$mol_locale.text("$bog_id_app_grant_template"));
+		}
+		device_template(){
+			return (this.$.$mol_locale.text("$bog_id_app_device_template"));
+		}
+		passkey_rebind_title(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_rebind_title"));
+		}
+		passkey_done(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_done"));
+		}
+		passkey_none(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_none"));
+		}
+		passkey_wait(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_wait"));
+		}
+		passkey_wrong(){
+			return (this.$.$mol_locale.text("$bog_id_app_passkey_wrong"));
+		}
 	};
 	($mol_mem(($.$bog_id_app.prototype), "Theme"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_text"));
+	($mol_mem(($.$bog_id_app.prototype), "Consent_self"));
 	($mol_mem(($.$bog_id_app.prototype), "approve"));
 	($mol_mem(($.$bog_id_app.prototype), "Approve"));
 	($mol_mem(($.$bog_id_app.prototype), "reject"));
 	($mol_mem(($.$bog_id_app.prototype), "Reject"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_tools"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent"));
+	($mol_mem(($.$bog_id_app.prototype), "name"));
+	($mol_mem(($.$bog_id_app.prototype), "Name"));
+	($mol_mem(($.$bog_id_app.prototype), "Name_label"));
 	($mol_mem(($.$bog_id_app.prototype), "Lord"));
 	($mol_mem(($.$bog_id_app.prototype), "Lord_label"));
-	($mol_mem_key(($.$bog_id_app.prototype), "Grant_origin"));
-	($mol_mem_key(($.$bog_id_app.prototype), "Grant_scope"));
+	($mol_mem(($.$bog_id_app.prototype), "passkey_bind"));
+	($mol_mem(($.$bog_id_app.prototype), "Passkey_bind"));
+	($mol_mem(($.$bog_id_app.prototype), "passkey_enter"));
+	($mol_mem(($.$bog_id_app.prototype), "Passkey_enter"));
+	($mol_mem(($.$bog_id_app.prototype), "Passkey_tools"));
+	($mol_mem(($.$bog_id_app.prototype), "Passkey_status"));
+	($mol_mem(($.$bog_id_app.prototype), "Passkey_label"));
+	($mol_mem_key(($.$bog_id_app.prototype), "Grant_title"));
 	($mol_mem_key(($.$bog_id_app.prototype), "grant_revoke"));
 	($mol_mem_key(($.$bog_id_app.prototype), "Grant_revoke"));
+	($mol_mem_key(($.$bog_id_app.prototype), "Grant_head"));
+	($mol_mem_key(($.$bog_id_app.prototype), "App_title"));
+	($mol_mem_key(($.$bog_id_app.prototype), "app_revoke"));
+	($mol_mem_key(($.$bog_id_app.prototype), "App_revoke"));
+	($mol_mem_key(($.$bog_id_app.prototype), "App"));
 	($mol_mem_key(($.$bog_id_app.prototype), "Grant"));
 	($mol_mem(($.$bog_id_app.prototype), "Grants"));
 	($mol_mem(($.$bog_id_app.prototype), "Grants_label"));
 
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $bog_passkey_secret extends $mol_object2 {
+        static async make(user = crypto.getRandomValues(new Uint8Array(16)), name = 'passkey') {
+            if (!this.$.$mol_dom_context.PublicKeyCredential) {
+                $mol_fail(new Error('WebAuthn is unavailable: HTTPS or localhost is required'));
+            }
+            const cred = await this.$.$mol_dom_context.navigator.credentials.create({
+                publicKey: {
+                    rp: { name: '$mol_passkey_secret' },
+                    user: {
+                        id: user,
+                        name,
+                        displayName: name,
+                    },
+                    pubKeyCredParams: [
+                        { type: 'public-key', alg: -7 },
+                        { type: 'public-key', alg: -257 },
+                    ],
+                    authenticatorSelection: { userVerification: 'required', residentKey: 'required' },
+                    challenge: crypto.getRandomValues(new Uint8Array(32)),
+                    extensions: { prf: {} },
+                },
+            });
+            if (!cred)
+                $mol_fail(new Error('Passkey was not created'));
+            const ext = cred.getClientExtensionResults();
+            if (!ext.prf?.enabled) {
+                $mol_fail(new Error('This device or browser does not support PRF'));
+            }
+            return new Uint8Array(cred.rawId);
+        }
+        static async get(salt, id) {
+            const cred = await this.$.$mol_dom_context.navigator.credentials.get({
+                publicKey: {
+                    allowCredentials: id ? [{ type: 'public-key', id }] : undefined,
+                    userVerification: 'required',
+                    challenge: crypto.getRandomValues(new Uint8Array(32)),
+                    extensions: { prf: { eval: { first: salt } } },
+                },
+            });
+            const ext = cred?.getClientExtensionResults();
+            const first = ext?.prf?.results?.first;
+            if (!cred || !first) {
+                $mol_fail(new Error('Passkey not found or returned no PRF secret'));
+            }
+            const user = cred.response.userHandle;
+            return {
+                id: new Uint8Array(cred.rawId),
+                key: new Uint8Array(first),
+                user: user ? new Uint8Array(user) : null,
+            };
+        }
+    }
+    $.$bog_passkey_secret = $bog_passkey_secret;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Seals Giper Baza Auth with passkey secret */
+    class $bog_id_vault extends $mol_object2 {
+        static secret(key) {
+            return $mol_crypto2_secret.from(key.slice(0, $mol_crypto2_secret.size));
+        }
+        static async seal(auth, key) {
+            const nonce = $mol_crypto2_nonce();
+            const open = $mol_charset_encode(auth.toString() + auth.toStringPrivate());
+            const closed = await this.secret(key).encrypt(open, nonce);
+            return $mol_base64_url_encode(nonce) + '.' + $mol_base64_url_encode(closed);
+        }
+        static async open(vault, key) {
+            const [nonce, closed] = vault.split('.').map(chunk => $mol_base64_url_decode(chunk));
+            const open = await this.secret(key).decrypt(closed, nonce);
+            return $mol_charset_decode(open);
+        }
+    }
+    $.$bog_id_vault = $bog_id_vault;
+})($ || ($ = {}));
 
 ;
 "use strict";
@@ -31100,55 +31318,60 @@ var $;
     (function ($$) {
         class $bog_id_app extends $.$bog_id_app {
             auto() {
-                this.store();
+                this.profile();
+                this.grants();
                 this.listening();
+                this.restoring();
             }
-            store() {
-                return this.$.$giper_baza_glob.home().land().Data($bog_id_store);
+            glob() {
+                return this.$.$giper_baza_glob;
+            }
+            profile() {
+                return this.glob().home().land().Data($bog_id_profile);
+            }
+            lord() {
+                return this.$.$giper_baza_auth.current().pass().lord().str;
+            }
+            name(next) {
+                return this.profile().Name(next)?.val(next) ?? '';
+            }
+            stores() {
+                return (this.profile().Stores()?.items() ?? [])
+                    .map(link => this.glob().Land(new $giper_baza_link(String(link))).Data($bog_id_store));
+            }
+            store_ensure() {
+                const [found] = this.stores();
+                if (found)
+                    return found;
+                const land = this.glob().land_grab([[null, $giper_baza_rank_deny]]);
+                this.profile().Stores('auto').add(land.link().str);
+                return land.Data($bog_id_store);
             }
             grants() {
-                const land = this.store().land();
-                return (this.store().Grants()?.items() ?? [])
-                    .map(link => land.Pawn($bog_id_grant).Head(new $giper_baza_link(String(link)).head()));
+                return this.stores().flatMap(store => {
+                    const land = store.land();
+                    return (store.Grants()?.items() ?? [])
+                        .map(link => land.Pawn($bog_id_grant).Head(new $giper_baza_link(String(link)).head()));
+                });
             }
             grant(id) {
                 return this.grants().find(grant => grant.link().str === id);
             }
-            grant_find(origin, scope) {
-                return this.grants().find(grant => grant.Origin()?.val() === origin && grant.Scope()?.val() === scope) ?? null;
+            grant_find(app, scope) {
+                return this.grants().find(grant => grant.App()?.val() === app && grant.Scope()?.val() === scope) ?? null;
             }
-            grant_ensure(origin, scope) {
-                const found = this.grant_find(origin, scope);
-                if (found)
-                    return found;
-                const land = this.$.$giper_baza_glob.land_grab([[null, $giper_baza_rank_deny]]);
-                const grant = this.store().Grants('auto').make(null);
-                grant.Origin('auto').val(origin);
-                grant.Scope('auto').val(scope);
-                grant.Land('auto').val(land.link().str);
-                return grant;
-            }
-            grant_give(grant, pass) {
-                const { given, listed, revoked } = this.grant_state(grant, pass);
-                if (!given)
-                    this.grant_land(grant).give(pass, $giper_baza_rank_post('just'));
-                if (!listed)
-                    grant.Apps('auto').add(pass.toString());
-                if (revoked)
-                    grant.Revoked('auto').val(false);
-            }
-            grant_state(grant, pass) {
-                return {
-                    given: this.grant_land(grant).lord_rank(pass.lord()) === $giper_baza_rank_post('just'),
-                    listed: (grant.Apps()?.items() ?? []).includes(pass.toString()),
-                    revoked: grant.Revoked()?.val() ?? false,
-                };
+            grant_pointer(grant) {
+                return this.glob().Land(new $giper_baza_link(grant.Pointer()?.val() ?? ''));
             }
             grant_land(grant) {
-                return this.$.$giper_baza_glob.Land(new $giper_baza_link(grant.Land()?.val() ?? ''));
+                return this.glob().Land(new $giper_baza_link(grant.Land()?.val() ?? ''));
             }
-            lord() {
-                return this.$.$giper_baza_auth.current().pass().lord().str;
+            grant_lands(grant) {
+                return (grant.Lands()?.items() ?? [])
+                    .map(link => this.glob().Land(new $giper_baza_link(String(link))));
+            }
+            grant_apps(grant) {
+                return (grant.Apps()?.items() ?? []).map(String);
             }
             listening() {
                 const win = this.$.$mol_dom_context;
@@ -31165,9 +31388,19 @@ var $;
                     return;
                 this.request({
                     origin: event.origin,
+                    app: this.app_of(event),
                     pass: String(event.data.pass),
                     scope: String(event.data.scope),
                 });
+            }
+            app_of(event) {
+                try {
+                    const place = event.source.location;
+                    return place.origin + place.pathname.replace(/[^/]*$/, '');
+                }
+                catch {
+                    return event.origin;
+                }
             }
             request(next) {
                 return next ?? null;
@@ -31179,21 +31412,33 @@ var $;
                 const pass = $giper_baza_auth_pass.from(str);
                 return pass.uint8(0) === 0xFF ? pass : null;
             }
+            request_self() {
+                return this.request_pass()?.lord().str === this.lord();
+            }
             body() {
                 return [
                     ...this.request() ? [this.Consent()] : [],
+                    this.Name_label(),
                     this.Lord_label(),
+                    this.Passkey_label(),
                     this.Grants_label(),
+                ];
+            }
+            consent_rows() {
+                return [
+                    this.Consent_text(),
+                    ...this.request_self() ? [this.Consent_self()] : [],
+                    this.Consent_tools(),
                 ];
             }
             consent_text() {
                 const request = this.request();
                 return this.consent_template()
-                    .replace('{origin}', request?.origin ?? '')
+                    .replace('{app}', request?.app ?? '')
                     .replace('{scope}', request?.scope ?? '');
             }
             approve_enabled() {
-                return Boolean(this.request_pass());
+                return Boolean(this.request_pass()) && !this.request_self();
             }
             approve() {
                 $mol_wire_async(this).grant_send();
@@ -31207,62 +31452,228 @@ var $;
             }
             grant_send() {
                 const sent = this.grant_save();
-                this.$.$mol_dom_context.opener?.postMessage({ bog_id: 'grant', lord: sent.lord, land: sent.land }, sent.origin);
+                const { origin, ...data } = sent;
+                this.$.$mol_dom_context.opener?.postMessage({ bog_id: 'grant', ...data }, origin);
                 this.request(null);
             }
             grant_save() {
-                const { origin, scope } = this.request();
+                const { origin, app, scope } = this.request();
                 const pass = this.request_pass();
-                const grant = this.grant_ensure(origin, scope);
+                const grant = this.grant_ensure(app, scope);
                 this.grant_give(grant, pass);
-                const land = this.grant_land(grant);
-                land.units_saving();
-                return { origin, lord: this.lord(), land: land.link().str };
+                this.grant_saving(grant);
+                return {
+                    origin,
+                    lord: this.lord(),
+                    name: this.name(),
+                    pointer: grant.Pointer()?.val() ?? '',
+                };
+            }
+            grant_ensure(app, scope) {
+                const found = this.grant_find(app, scope);
+                if (found)
+                    return found;
+                const store = this.store_ensure();
+                const pointer = this.glob().land_grab([[null, $giper_baza_rank_deny]]);
+                const land = this.glob().land_grab([[null, $giper_baza_rank_deny]]);
+                pointer.Data($giper_baza_atom_text).val(land.link().str);
+                const grant = store.Grants('auto').make(null);
+                grant.App('auto').val(app);
+                grant.Scope('auto').val(scope);
+                grant.Pointer('auto').val(pointer.link().str);
+                grant.Land('auto').val(land.link().str);
+                grant.Lands('auto').add(land.link().str);
+                return grant;
+            }
+            grant_state(grant, pass) {
+                return {
+                    given: this.grant_land(grant).lord_rank(pass.lord()) === $giper_baza_rank_post('just'),
+                    listed: this.grant_apps(grant).includes(pass.toString()),
+                    pointer: this.grant_pointer(grant),
+                    land: this.grant_land(grant),
+                    lands: this.grant_lands(grant),
+                };
+            }
+            grant_give(grant, pass) {
+                const { given, listed, pointer, land, lands } = this.grant_state(grant, pass);
+                if (!given) {
+                    pointer.give(pass, $giper_baza_rank_read);
+                    for (const old of lands)
+                        if (old !== land)
+                            old.give(pass, $giper_baza_rank_read);
+                    land.give(pass, $giper_baza_rank_post('just'));
+                }
+                if (!listed)
+                    grant.Apps('auto').add(pass.toString());
+            }
+            grant_saving(grant) {
+                this.grant_pointer(grant).units_saving();
+                for (const land of this.grant_lands(grant))
+                    land.units_saving();
+            }
+            rotate_state(grant) {
+                return {
+                    apps: this.grant_apps(grant),
+                    pointer: this.grant_pointer(grant),
+                    land: this.grant_land(grant),
+                    lands: this.grant_lands(grant),
+                };
+            }
+            rotate_write(grant, drop) {
+                const { apps, pointer, land, lands } = this.rotate_state(grant);
+                const out = drop ?? apps;
+                const keep = apps.filter(pass => !out.includes(pass));
+                const next = land.fork([[null, $giper_baza_rank_deny]]);
+                for (const str of out) {
+                    const pass = $giper_baza_auth_pass.from(str);
+                    pointer.give(pass, $giper_baza_rank_deny);
+                    for (const old of lands)
+                        old.give(pass, $giper_baza_rank_deny);
+                }
+                for (const str of keep)
+                    next.give($giper_baza_auth_pass.from(str), $giper_baza_rank_post('just'));
+                pointer.Data($giper_baza_atom_text).val(next.link().str);
+                grant.Land('auto').val(next.link().str);
+                grant.Lands('auto').add(next.link().str);
+                for (const str of out)
+                    grant.Apps('auto').cut(str);
+            }
+            rotate(id, drop) {
+                const grant = this.grant(id);
+                this.rotate_write(grant, drop);
+                this.grant_saving(grant);
             }
             grant_rows() {
                 return this.grants().map(grant => this.Grant(grant.link().str));
             }
-            grant_origin(id) {
-                return this.grant(id).Origin()?.val() ?? '';
+            grant_parts(id) {
+                return [
+                    this.Grant_head(id),
+                    ...this.grant_apps(this.grant(id)).map(pass => this.App(`${id}|${pass}`)),
+                ];
             }
-            grant_scope(id) {
-                return this.grant(id).Scope()?.val() ?? '';
+            grant_title(id) {
+                const grant = this.grant(id);
+                return this.grant_template()
+                    .replace('{app}', grant.App()?.val() ?? '')
+                    .replace('{scope}', grant.Scope()?.val() ?? '');
             }
             grant_active(id) {
-                return !(this.grant(id).Revoked()?.val() ?? false);
+                return this.grant_apps(this.grant(id)).length > 0;
             }
             grant_revoke(id) {
-                $mol_wire_async(this).revoke(id);
+                $mol_wire_async(this).rotate(id, null);
             }
-            revoke(id) {
-                const grant = this.grant(id);
-                const land = this.grant_land(grant);
-                const apps = grant.Apps()?.items() ?? [];
-                for (const str of apps) {
-                    land.give($giper_baza_auth_pass.from(String(str)), $giper_baza_rank_deny);
-                }
-                grant.Revoked('auto').val(true);
-                land.units_saving();
+            app_title(key) {
+                const pass = $giper_baza_auth_pass.from(key.split('|')[1]);
+                return this.device_template().replace('{lord}', pass.lord().str);
+            }
+            app_revoke(key) {
+                const [id, pass] = key.split('|');
+                $mol_wire_async(this).rotate(id, [pass]);
+            }
+            vault(next) {
+                return this.profile().Vault(next)?.val(next) ?? '';
+            }
+            vault_of(lord) {
+                return this.glob().Land(new $giper_baza_link(lord)).Data($bog_id_profile).Vault()?.val() ?? '';
+            }
+            passkey_salt() {
+                return new Uint8Array($mol_charset_encode('bog_id'));
+            }
+            passkey_bind_title() {
+                return this.vault() ? this.passkey_rebind_title() : super.passkey_bind_title();
+            }
+            passkey_error(next) {
+                return next ?? '';
+            }
+            passkey_status() {
+                if (this.passkey_error())
+                    return this.passkey_error();
+                if (this.restore())
+                    return this.restoring();
+                return this.vault() ? this.passkey_done() : this.passkey_none();
+            }
+            passkey_bind() {
+                this.passkey_error('');
+                this.passkey_bind_run().catch(error => this.passkey_error(error.message));
+            }
+            async passkey_bind_run() {
+                const auth = this.$.$giper_baza_auth.current();
+                const lord = auth.pass().lord();
+                const id = await this.$.$bog_passkey_secret.make(lord.toBin(), this.name() || lord.str);
+                const { key } = await this.$.$bog_passkey_secret.get(this.passkey_salt(), id);
+                const vault = await this.$.$bog_id_vault.seal(auth, key);
+                await $mol_wire_async(this).vault(vault);
+            }
+            passkey_enter() {
+                this.passkey_error('');
+                this.passkey_enter_run().catch(error => this.passkey_error(error.message));
+            }
+            async passkey_enter_run() {
+                const found = await this.$.$bog_passkey_secret.get(this.passkey_salt());
+                if (!found.user)
+                    $mol_fail(new Error('Passkey has no user'));
+                const lord = $giper_baza_link.from_bin(found.user);
+                this.restore({ lord: lord.str, key: found.key });
+            }
+            restore(next) {
+                return next ?? null;
+            }
+            restoring() {
+                const restore = this.restore();
+                if (!restore)
+                    return '';
+                const vault = this.vault_of(restore.lord);
+                if (!vault)
+                    return this.passkey_wait();
+                const str = $mol_wire_sync(this.$.$bog_id_vault).open(vault, restore.key);
+                if (!str.startsWith('_'))
+                    return this.passkey_wrong();
+                const auth = this.$.$giper_baza_auth.from(str);
+                if (auth.pass().lord().str !== restore.lord)
+                    return this.passkey_wrong();
+                this.$.$giper_baza_auth.current(auth);
+                this.$.$mol_dom_context.location.reload();
+                return '';
             }
         }
         __decorate([
-            $mol_action
-        ], $bog_id_app.prototype, "grant_ensure", null);
-        __decorate([
-            $mol_action
-        ], $bog_id_app.prototype, "grant_give", null);
-        __decorate([
-            $mol_action
-        ], $bog_id_app.prototype, "grant_state", null);
-        __decorate([
             $mol_mem
         ], $bog_id_app.prototype, "lord", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "store_ensure", null);
         __decorate([
             $mol_mem
         ], $bog_id_app.prototype, "listening", null);
         __decorate([
             $mol_mem
         ], $bog_id_app.prototype, "request", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "grant_ensure", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "grant_state", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "grant_give", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "rotate_state", null);
+        __decorate([
+            $mol_action
+        ], $bog_id_app.prototype, "rotate_write", null);
+        __decorate([
+            $mol_mem
+        ], $bog_id_app.prototype, "passkey_error", null);
+        __decorate([
+            $mol_mem
+        ], $bog_id_app.prototype, "restore", null);
+        __decorate([
+            $mol_mem
+        ], $bog_id_app.prototype, "restoring", null);
         $$.$bog_id_app = $bog_id_app;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

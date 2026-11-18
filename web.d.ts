@@ -45183,22 +45183,24 @@ declare namespace $.$$ {
 declare namespace $ {
     const $bog_id_grant_base: Omit<typeof $giper_baza_dict, "prototype"> & {
         new (...args: any[]): $mol_type_override<$giper_baza_dict, {
-            readonly Origin: (auto?: any) => $giper_baza_atom_text | null;
+            readonly App: (auto?: any) => $giper_baza_atom_text | null;
             readonly Scope: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Pointer: (auto?: any) => $giper_baza_atom_text | null;
             readonly Land: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Lands: (auto?: any) => $giper_baza_list_str | null;
             readonly Apps: (auto?: any) => $giper_baza_list_str | null;
-            readonly Revoked: (auto?: any) => $giper_baza_atom_bool | null;
         }>;
         path: string;
     } & {
         schema: {
             [x: string]: typeof $giper_baza_pawn;
         } & {
-            readonly Origin: typeof $giper_baza_atom_text;
+            readonly App: typeof $giper_baza_atom_text;
             readonly Scope: typeof $giper_baza_atom_text;
+            readonly Pointer: typeof $giper_baza_atom_text;
             readonly Land: typeof $giper_baza_atom_text;
+            readonly Lands: typeof $giper_baza_list_str;
             readonly Apps: typeof $giper_baza_list_str;
-            readonly Revoked: typeof $giper_baza_atom_bool;
         };
     };
     export class $bog_id_grant extends $bog_id_grant_base {
@@ -45953,6 +45955,24 @@ declare namespace $ {
     };
     export class $bog_id_store extends $bog_id_store_base {
     }
+    const $bog_id_profile_base: Omit<typeof $giper_baza_dict, "prototype"> & {
+        new (...args: any[]): $mol_type_override<$giper_baza_dict, {
+            readonly Name: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Vault: (auto?: any) => $giper_baza_atom_text | null;
+            readonly Stores: (auto?: any) => $giper_baza_list_str | null;
+        }>;
+        path: string;
+    } & {
+        schema: {
+            [x: string]: typeof $giper_baza_pawn;
+        } & {
+            readonly Name: typeof $giper_baza_atom_text;
+            readonly Vault: typeof $giper_baza_atom_text;
+            readonly Stores: typeof $giper_baza_list_str;
+        };
+    };
+    export class $bog_id_profile extends $bog_id_profile_base {
+    }
     export {};
 }
 
@@ -46018,103 +46038,208 @@ declare namespace $ {
 
 //# sourceMappingURL=row.view.tree.d.ts.map
 declare namespace $ {
+    class $bog_passkey_secret extends $mol_object2 {
+        static make(user?: Uint8Array<ArrayBuffer>, name?: string): Promise<Uint8Array<ArrayBuffer>>;
+        static get(salt: Uint8Array<ArrayBuffer>, id?: Uint8Array<ArrayBuffer>): Promise<{
+            id: Uint8Array<ArrayBuffer>;
+            key: Uint8Array<ArrayBuffer>;
+            user: Uint8Array<ArrayBuffer> | null;
+        }>;
+    }
+}
+
+declare namespace $ {
+    /** Seals Giper Baza Auth with passkey secret */
+    class $bog_id_vault extends $mol_object2 {
+        static secret(key: Uint8Array<ArrayBuffer>): $mol_crypto2_secret;
+        static seal(auth: $giper_baza_auth, key: Uint8Array<ArrayBuffer>): Promise<string>;
+        static open(vault: string, key: Uint8Array<ArrayBuffer>): Promise<string>;
+    }
+}
+
+declare namespace $ {
 
 	type $mol_paragraph__title_bog_id_app_1 = $mol_type_enforce<
 		ReturnType< $bog_id_app['consent_text'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_major__title_bog_id_app_2 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_major__title_bog_id_app_3 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_major['title'] >
 	>
-	type $mol_button_major__enabled_bog_id_app_3 = $mol_type_enforce<
+	type $mol_button_major__enabled_bog_id_app_4 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve_enabled'] >
 		,
 		ReturnType< $mol_button_major['enabled'] >
 	>
-	type $mol_button_major__click_bog_id_app_4 = $mol_type_enforce<
+	type $mol_button_major__click_bog_id_app_5 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve'] >
 		,
 		ReturnType< $mol_button_major['click'] >
 	>
-	type $mol_button_minor__title_bog_id_app_5 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_6 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_6 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_7 = $mol_type_enforce<
 		ReturnType< $bog_id_app['reject'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_row__sub_bog_id_app_7 = $mol_type_enforce<
+	type $mol_row__sub_bog_id_app_8 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_row['sub'] >
 	>
-	type $mol_list__rows_bog_id_app_8 = $mol_type_enforce<
-		readonly(any)[]
+	type $mol_list__rows_bog_id_app_9 = $mol_type_enforce<
+		ReturnType< $bog_id_app['consent_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_paragraph__title_bog_id_app_9 = $mol_type_enforce<
-		ReturnType< $bog_id_app['lord'] >
+	type $mol_string__hint_bog_id_app_10 = $mol_type_enforce<
+		string
 		,
-		ReturnType< $mol_paragraph['title'] >
+		ReturnType< $mol_string['hint'] >
 	>
-	type $mol_labeler__title_bog_id_app_10 = $mol_type_enforce<
+	type $mol_string__value_bog_id_app_11 = $mol_type_enforce<
+		ReturnType< $bog_id_app['name'] >
+		,
+		ReturnType< $mol_string['value'] >
+	>
+	type $mol_labeler__title_bog_id_app_12 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_labeler['title'] >
 	>
-	type $mol_labeler__content_bog_id_app_11 = $mol_type_enforce<
+	type $mol_labeler__content_bog_id_app_13 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_labeler['content'] >
 	>
-	type $mol_paragraph__title_bog_id_app_12 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_origin'] >
+	type $mol_paragraph__title_bog_id_app_14 = $mol_type_enforce<
+		ReturnType< $bog_id_app['lord'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_13 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_scope'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_button_minor__title_bog_id_app_14 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['title'] >
-	>
-	type $mol_button_minor__enabled_bog_id_app_15 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_active'] >
-		,
-		ReturnType< $mol_button_minor['enabled'] >
-	>
-	type $mol_button_minor__click_bog_id_app_16 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_revoke'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_row__sub_bog_id_app_17 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_row['sub'] >
-	>
-	type $mol_list__rows_bog_id_app_18 = $mol_type_enforce<
-		ReturnType< $bog_id_app['grant_rows'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_labeler__title_bog_id_app_19 = $mol_type_enforce<
+	type $mol_labeler__title_bog_id_app_15 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_labeler['title'] >
 	>
-	type $mol_labeler__content_bog_id_app_20 = $mol_type_enforce<
+	type $mol_labeler__content_bog_id_app_16 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_labeler['content'] >
+	>
+	type $mol_button_minor__title_bog_id_app_17 = $mol_type_enforce<
+		ReturnType< $bog_id_app['passkey_bind_title'] >
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_id_app_18 = $mol_type_enforce<
+		ReturnType< $bog_id_app['passkey_bind'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_button_minor__title_bog_id_app_19 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_id_app_20 = $mol_type_enforce<
+		ReturnType< $bog_id_app['passkey_enter'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_row__sub_bog_id_app_21 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_row['sub'] >
+	>
+	type $mol_paragraph__title_bog_id_app_22 = $mol_type_enforce<
+		ReturnType< $bog_id_app['passkey_status'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_labeler__title_bog_id_app_23 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__content_bog_id_app_24 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_labeler['content'] >
+	>
+	type $mol_paragraph__title_bog_id_app_25 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_title'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_minor__title_bog_id_app_26 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__enabled_bog_id_app_27 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_active'] >
+		,
+		ReturnType< $mol_button_minor['enabled'] >
+	>
+	type $mol_button_minor__click_bog_id_app_28 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_revoke'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_row__sub_bog_id_app_29 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_row['sub'] >
+	>
+	type $mol_paragraph__title_bog_id_app_30 = $mol_type_enforce<
+		ReturnType< $bog_id_app['app_title'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_minor__title_bog_id_app_31 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_id_app_32 = $mol_type_enforce<
+		ReturnType< $bog_id_app['app_revoke'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_row__sub_bog_id_app_33 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_row['sub'] >
+	>
+	type $mol_list__rows_bog_id_app_34 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_parts'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_list__rows_bog_id_app_35 = $mol_type_enforce<
+		ReturnType< $bog_id_app['grant_rows'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_labeler__title_bog_id_app_36 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__content_bog_id_app_37 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_labeler['content'] >
@@ -46123,24 +46248,43 @@ declare namespace $ {
 		Theme( ): $mol_theme_auto
 		consent_text( ): string
 		Consent_text( ): $mol_paragraph
+		Consent_self( ): $mol_paragraph
 		approve_enabled( ): boolean
 		approve( next?: any ): any
 		Approve( ): $mol_button_major
 		reject( next?: any ): any
 		Reject( ): $mol_button_minor
 		Consent_tools( ): $mol_row
+		consent_rows( ): readonly(any)[]
 		Consent( ): $mol_list
+		name( next?: string ): string
+		Name( ): $mol_string
+		Name_label( ): $mol_labeler
 		lord( ): string
 		Lord( ): $mol_paragraph
 		Lord_label( ): $mol_labeler
-		grant_origin( id: any): string
-		Grant_origin( id: any): $mol_paragraph
-		grant_scope( id: any): string
-		Grant_scope( id: any): $mol_paragraph
+		passkey_bind_title( ): string
+		passkey_bind( next?: any ): any
+		Passkey_bind( ): $mol_button_minor
+		passkey_enter( next?: any ): any
+		Passkey_enter( ): $mol_button_minor
+		Passkey_tools( ): $mol_row
+		passkey_status( ): string
+		Passkey_status( ): $mol_paragraph
+		Passkey_label( ): $mol_labeler
+		grant_title( id: any): string
+		Grant_title( id: any): $mol_paragraph
 		grant_active( id: any): boolean
 		grant_revoke( id: any, next?: any ): any
 		Grant_revoke( id: any): $mol_button_minor
-		Grant( id: any): $mol_row
+		Grant_head( id: any): $mol_row
+		app_title( id: any): string
+		App_title( id: any): $mol_paragraph
+		app_revoke( id: any, next?: any ): any
+		App_revoke( id: any): $mol_button_minor
+		App( id: any): $mol_row
+		grant_parts( id: any): readonly(any)[]
+		Grant( id: any): $mol_list
 		grant_rows( ): readonly(any)[]
 		Grants( ): $mol_list
 		Grants_label( ): $mol_labeler
@@ -46148,6 +46292,13 @@ declare namespace $ {
 		plugins( ): readonly(any)[]
 		body( ): readonly(any)[]
 		consent_template( ): string
+		grant_template( ): string
+		device_template( ): string
+		passkey_rebind_title( ): string
+		passkey_done( ): string
+		passkey_none( ): string
+		passkey_wait( ): string
+		passkey_wrong( ): string
 	}
 	
 }
@@ -46156,29 +46307,37 @@ declare namespace $ {
 declare namespace $.$$ {
     type $bog_id_app_request = {
         origin: string;
+        app: string;
         pass: string;
         scope: string;
     };
+    type $bog_id_app_restore = {
+        lord: string;
+        key: Uint8Array<ArrayBuffer>;
+    };
     class $bog_id_app extends $.$bog_id_app {
         auto(): void;
-        store(): $bog_id_store;
+        glob(): typeof $giper_baza_glob;
+        profile(): $bog_id_profile;
+        lord(): string;
+        name(next?: string): string;
+        stores(): $bog_id_store[];
+        store_ensure(): $bog_id_store;
         grants(): $bog_id_grant[];
         grant(id: string): $bog_id_grant;
-        grant_find(origin: string, scope: string): $bog_id_grant | null;
-        grant_ensure(origin: string, scope: string): $bog_id_grant;
-        grant_give(grant: $bog_id_grant, pass: $giper_baza_auth_pass): void;
-        grant_state(grant: $bog_id_grant, pass: $giper_baza_auth_pass): {
-            given: boolean;
-            listed: boolean;
-            revoked: boolean;
-        };
+        grant_find(app: string, scope: string): $bog_id_grant | null;
+        grant_pointer(grant: $bog_id_grant): $giper_baza_land;
         grant_land(grant: $bog_id_grant): $giper_baza_land;
-        lord(): string;
+        grant_lands(grant: $bog_id_grant): $giper_baza_land[];
+        grant_apps(grant: $bog_id_grant): string[];
         listening(): $mol_dom_listener | null;
         receive(event: MessageEvent): void;
+        app_of(event: MessageEvent): string;
         request(next?: $bog_id_app_request | null): $bog_id_app_request | null;
         request_pass(): $giper_baza_auth_pass | null;
+        request_self(): boolean;
         body(): ($.$mol_list | $mol_labeler)[];
+        consent_rows(): ($.$mol_paragraph | $mol_row)[];
         consent_text(): string;
         approve_enabled(): boolean;
         approve(): void;
@@ -46187,14 +46346,46 @@ declare namespace $.$$ {
         grant_save(): {
             origin: string;
             lord: string;
-            land: string;
+            name: string;
+            pointer: string;
         };
-        grant_rows(): $mol_row[];
-        grant_origin(id: string): string;
-        grant_scope(id: string): string;
+        grant_ensure(app: string, scope: string): $bog_id_grant;
+        grant_state(grant: $bog_id_grant, pass: $giper_baza_auth_pass): {
+            given: boolean;
+            listed: boolean;
+            pointer: $giper_baza_land;
+            land: $giper_baza_land;
+            lands: $giper_baza_land[];
+        };
+        grant_give(grant: $bog_id_grant, pass: $giper_baza_auth_pass): void;
+        grant_saving(grant: $bog_id_grant): void;
+        rotate_state(grant: $bog_id_grant): {
+            apps: string[];
+            pointer: $giper_baza_land;
+            land: $giper_baza_land;
+            lands: $giper_baza_land[];
+        };
+        rotate_write(grant: $bog_id_grant, drop: readonly string[] | null): void;
+        rotate(id: string, drop: readonly string[] | null): void;
+        grant_rows(): $.$mol_list[];
+        grant_parts(id: string): $mol_row[];
+        grant_title(id: string): string;
         grant_active(id: string): boolean;
         grant_revoke(id: string): void;
-        revoke(id: string): void;
+        app_title(key: string): string;
+        app_revoke(key: string): void;
+        vault(next?: string): string;
+        vault_of(lord: string): string;
+        passkey_salt(): Uint8Array<ArrayBuffer>;
+        passkey_bind_title(): string;
+        passkey_error(next?: string): string;
+        passkey_status(): string;
+        passkey_bind(): void;
+        passkey_bind_run(): Promise<void>;
+        passkey_enter(): void;
+        passkey_enter_run(): Promise<void>;
+        restore(next?: $bog_id_app_restore | null): $bog_id_app_restore | null;
+        restoring(): string;
     }
 }
 

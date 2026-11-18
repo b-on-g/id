@@ -1,0 +1,10 @@
+{
+	"$bog_id_demo2_title": "Вход через Гипер ID: свой ключ",
+	"$bog_id_demo_Login_title": "Войти через Гипер ID",
+	"$bog_id_demo_Note_hint": "Заметка в выданном ленде",
+	"$bog_id_demo_Provider_label_title": "Провайдер",
+	"$bog_id_demo_status_in": "{name}, права: {tier}",
+	"$bog_id_demo_status_out": "Не вошли",
+	"$bog_id_demo_title": "Вход через Гипер ID",
+	"$mol_text_code_Copy_hint": "Copy whole code"
+}

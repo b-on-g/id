@@ -96,6 +96,52 @@ $mol_list $mol_view
 		0
 		0
 
+$mol_hotkey2 $mol_plugin
+	event *
+		^
+		keydown? <=> keydown? null
+	action *
+
+$mol_hotkey $mol_hotkey2
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
+
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection? /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+		<= error_report null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed? <=> value? \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+		enterkeyhint <= enter \go
+	attr *
+		^
+		maxlength <= length_max +Infinity
+		type <= type? \text
+	event *
+		^
+		input? <=> event_change? null
+	plugins /
+		<= Submit $mol_hotkey
+			mod_ctrl <= submit_with_ctrl false
+			key * enter? <=> submit? null
+
 $mol_labeler $mol_list
 	rows /
 		<= Label $mol_view
@@ -112,9 +158,11 @@ $bog_id_app $mol_page
 		<= Theme $mol_theme_auto
 	body /
 		<= Consent $mol_list
-			rows /
+			rows <= consent_rows /
 				<= Consent_text $mol_paragraph
 					title <= consent_text \
+				<= Consent_self $mol_paragraph
+					title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
 				<= Consent_tools $mol_row
 					sub /
 						<= Approve $mol_button_major
@@ -124,24 +172,57 @@ $bog_id_app $mol_page
 						<= Reject $mol_button_minor
 							title @ \Отклонить
 							click? <=> reject? null
+		<= Name_label $mol_labeler
+			title @ \Имя
+			content /
+				<= Name $mol_string
+					hint @ \Как вас показывать приложениям
+					value? <=> name? \
 		<= Lord_label $mol_labeler
 			title @ \Ваш лорд
 			content /
 				<= Lord $mol_paragraph
 					title <= lord \
+		<= Passkey_label $mol_labeler
+			title @ \Passkey
+			content /
+				<= Passkey_tools $mol_row
+					sub /
+						<= Passkey_bind $mol_button_minor
+							title <= passkey_bind_title @ \Привязать passkey
+							click? <=> passkey_bind? null
+						<= Passkey_enter $mol_button_minor
+							title @ \Войти по passkey
+							click? <=> passkey_enter? null
+				<= Passkey_status $mol_paragraph
+					title <= passkey_status \
 		<= Grants_label $mol_labeler
 			title @ \Подключённые приложения
 			content /
 				<= Grants $mol_list
 					rows <= grant_rows /
-						<= Grant* $mol_row
-							sub /
-								<= Grant_origin* $mol_paragraph
-									title <= grant_origin* \
-								<= Grant_scope* $mol_paragraph
-									title <= grant_scope* \
-								<= Grant_revoke* $mol_button_minor
-									title @ \Отозвать
-									enabled <= grant_active* true
-									click? <=> grant_revoke*? null
-	consent_template @ \{origin} просит доступ «{scope}»
+						<= Grant* $mol_list
+							rows <= grant_parts* /
+								<= Grant_head* $mol_row
+									sub /
+										<= Grant_title* $mol_paragraph
+											title <= grant_title* \
+										<= Grant_revoke* $mol_button_minor
+											title @ \Отозвать всё
+											enabled <= grant_active* true
+											click? <=> grant_revoke*? null
+								<= App* $mol_row
+									sub /
+										<= App_title* $mol_paragraph
+											title <= app_title* \
+										<= App_revoke* $mol_button_minor
+											title @ \Отозвать
+											click? <=> app_revoke*? null
+	consent_template @ \{app} просит доступ «{scope}»
+	grant_template @ \{app} · {scope}
+	device_template @ \Устройство {lord}
+	passkey_rebind_title @ \Перепривязать passkey
+	passkey_done @ \Passkey привязан, ключ зашифрован им в Базе
+	passkey_none @ \Привяжите passkey, чтобы войти с другого устройства
+	passkey_wait @ \Ждём зашифрованный ключ из Базы…
+	passkey_wrong @ \Этот passkey не открывает ключ

@@ -327,7 +327,8 @@
     "$mol_svg_path",
     "$mol_html_encode",
     "$mol_html",
-    "$bog_id_login"
+    "$bog_id_login",
+    "$bog_id_land"
   ],
   "dependencies": {
     "autoinstall": "*",

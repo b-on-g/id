@@ -2175,4 +2175,4 @@ $bog_id_demo $mol_page
 			enabled <= note_enabled false
 			value? <=> note? \
 	status_out @ \Не вошли
-	status_in @ \{lord}, права: {tier}
+	status_in @ \{name}, права: {tier}

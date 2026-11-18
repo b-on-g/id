@@ -30794,11 +30794,12 @@ var $;
 var $;
 (function ($) {
     class $bog_id_grant extends $giper_baza_dict.with({
-        Origin: $giper_baza_atom_text,
+        App: $giper_baza_atom_text,
         Scope: $giper_baza_atom_text,
+        Pointer: $giper_baza_atom_text,
         Land: $giper_baza_atom_text,
+        Lands: $giper_baza_list_str,
         Apps: $giper_baza_list_str,
-        Revoked: $giper_baza_atom_bool,
     }) {
     }
     $.$bog_id_grant = $bog_id_grant;
@@ -30807,6 +30808,13 @@ var $;
     }) {
     }
     $.$bog_id_store = $bog_id_store;
+    class $bog_id_profile extends $giper_baza_dict.with({
+        Name: $giper_baza_atom_text,
+        Vault: $giper_baza_atom_text,
+        Stores: $giper_baza_list_str,
+    }) {
+    }
+    $.$bog_id_profile = $bog_id_profile;
 })($ || ($ = {}));
 
 ;
@@ -31011,7 +31019,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    /** Opens Giper ID popup, sends app Pass and resolves with granted Land */
+    /** Opens Giper ID popup, sends app Pass and resolves with Pointer to granted Land */
     function $bog_id_login(provider, pass, scope) {
         const win = $mol_dom_context;
         const origin = new URL(provider, win.location.href).origin;
@@ -31043,13 +31051,30 @@ var $;
                     finish(new Error('Access denied'));
                 if (data?.bog_id === 'grant') {
                     popup.close();
-                    finish(null, { lord: String(data.lord), land: String(data.land) });
+                    finish(null, {
+                        lord: String(data.lord),
+                        name: String(data.name ?? ''),
+                        pointer: String(data.pointer),
+                    });
                 }
             };
             win.addEventListener('message', listen);
         });
     }
     $.$bog_id_login = $bog_id_login;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Resolves Pointer from Giper ID grant to current data Land */
+    function $bog_id_land(pointer) {
+        const glob = this.$giper_baza_glob;
+        const link = glob.Land(new $giper_baza_link(pointer)).Data($giper_baza_atom_text).val();
+        return link ? glob.Land(new $giper_baza_link(link)) : null;
+    }
+    $.$bog_id_land = $bog_id_land;
 })($ || ($ = {}));
 
 ;
@@ -31082,8 +31107,8 @@ var $;
                     .catch($mol_fail_log);
             }
             land() {
-                const grant = this.grant();
-                return grant ? this.$.$giper_baza_glob.Land(new $giper_baza_link(grant.land)) : null;
+                const pointer = this.grant()?.pointer;
+                return pointer ? this.$.$bog_id_land(pointer) : null;
             }
             note(next) {
                 return String(this.land()?.Data($giper_baza_atom_text).val(next) ?? '');
@@ -31100,10 +31125,10 @@ var $;
             }
             status() {
                 const grant = this.grant();
-                if (!grant)
+                if (!grant?.pointer)
                     return this.status_out();
                 return this.status_in()
-                    .replace('{lord}', grant.lord)
+                    .replace('{name}', grant.name || grant.lord)
                     .replace('{tier}', $giper_baza_rank_tier[this.tier() ?? 0]);
             }
         }
