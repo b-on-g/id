@@ -1413,6 +1413,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    let $mol_mem_persist: typeof $mol_wire_solid;
+}
+
+declare namespace $ {
     /** State of time moment */
     class $mol_state_time extends $mol_object {
         static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
@@ -2761,7 +2765,8 @@ declare namespace $ {
         lord(next?: $giper_baza_link): $giper_baza_link;
         /** Unique number for encryption */
         salt(): Uint8Array<ArrayBuffer>;
-        hash(): $giper_baza_link;
+        _hash: null | $giper_baza_link;
+        hash(refresh?: null): $giper_baza_link;
         tier_min(): $giper_baza_rank_tier;
         encoded(): boolean;
         _land: null | $giper_baza_land;
@@ -37636,7 +37641,7 @@ declare namespace $ {
      * Theme css variables
      * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
      */
-    const $mol_theme: Record<"image" | "line" | "text" | "current" | "focus" | "back" | "hover" | "card" | "special" | "control" | "shade" | "field" | "spirit" | "hue" | "hue_spread", $mol_style_func<"var", unknown>>;
+    const $mol_theme: Record<"image" | "line" | "text" | "current" | "field" | "focus" | "back" | "hover" | "card" | "special" | "control" | "shade" | "spirit" | "hue" | "hue_spread", $mol_style_func<"var", unknown>>;
 }
 
 declare namespace $ {
@@ -37812,6 +37817,14 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    /** Plugin is component without its own DOM element, but instead uses the owner DOM element */
+    class $mol_plugin extends $mol_view {
+        dom_node_external(next?: Element): Element;
+        render(): void;
+    }
+}
+
+declare namespace $ {
     class $mol_dom_listener extends $mol_object {
         _node: any;
         _event: string;
@@ -37921,103 +37934,36 @@ declare namespace $.$$ {
 
 declare namespace $ {
     /**
-     * Fails if `Actual` type is not subtype of `Expected`.
+     * Theme css variables
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
      */
-    type $mol_type_enforce<Actual extends Expected, Expected> = Actual;
+    const $bog_theme: Record<"image" | "line" | "text" | "current" | "field" | "focus" | "background" | "back" | "hover" | "card" | "special" | "control" | "shade" | "spirit", $mol_style_func<"var", unknown>>;
+    /**
+     * Available theme names.
+     * Add new theme to theme.css and add its name here.
+     */
+    const $bog_theme_names: readonly ["$mol_theme_giper_smash_dark", "$mol_theme_giper_smash_light", "$mol_theme_light", "$mol_theme_dark", "$mol_theme_monefro_light", "$mol_theme_monefro_dark", "$mol_theme_homerent_light", "$mol_theme_homerent_dark", "$mol_theme_upwork", "$mol_theme_ainews_light", "$mol_theme_ainews_dark", "$mol_theme_calm_dark", "$mol_theme_calm_light"];
+    /**
+     * Type-safe theme name
+     */
+    type $bog_theme_name = (typeof $bog_theme_names)[number];
 }
 
 declare namespace $ {
-    /** Plugin is component without its own DOM element, but instead uses the owner DOM element */
-    class $mol_plugin extends $mol_view {
-        dom_node_external(next?: Element): Element;
-        render(): void;
+}
+
+declare namespace $ {
+    class $mol_state_session<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static value<Value>(key: string, next?: Value): Value;
+        prefix(): string;
+        value(key: string, next?: Value): Value;
     }
-}
-
-declare namespace $ {
-
-	type $mol_view__dom_name_mol_page_1 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_view['dom_name'] >
-	>
-	type $mol_view__sub_mol_page_2 = $mol_type_enforce<
-		ReturnType< $mol_page['title_content'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_view__sub_mol_page_3 = $mol_type_enforce<
-		ReturnType< $mol_page['tools'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_view__minimal_height_mol_page_4 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_view['minimal_height'] >
-	>
-	type $mol_view__dom_name_mol_page_5 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_view['dom_name'] >
-	>
-	type $mol_view__sub_mol_page_6 = $mol_type_enforce<
-		ReturnType< $mol_page['head'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type __mol_page_7 = $mol_type_enforce<
-		Parameters< $mol_page['body_scroll_top'] >[0]
-		,
-		Parameters< ReturnType< $mol_page['Body'] >['scroll_top'] >[0]
-	>
-	type $mol_view__sub_mol_page_8 = $mol_type_enforce<
-		ReturnType< $mol_page['body'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_scroll__sub_mol_page_9 = $mol_type_enforce<
-		ReturnType< $mol_page['body_content'] >
-		,
-		ReturnType< $mol_scroll['sub'] >
-	>
-	type $mol_view__dom_name_mol_page_10 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_view['dom_name'] >
-	>
-	type $mol_view__sub_mol_page_11 = $mol_type_enforce<
-		ReturnType< $mol_page['foot'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	export class $mol_page extends $mol_view {
-		tabindex( ): number
-		Logo( ): any
-		title_content( ): readonly(any)[]
-		Title( ): $mol_view
-		tools( ): readonly($mol_view_content)[]
-		Tools( ): $mol_view
-		head( ): readonly(any)[]
-		Head( ): $mol_view
-		body_scroll_top( next?: ReturnType< ReturnType< $mol_page['Body'] >['scroll_top'] > ): ReturnType< ReturnType< $mol_page['Body'] >['scroll_top'] >
-		body( ): readonly($mol_view)[]
-		Body_content( ): $mol_view
-		body_content( ): readonly(any)[]
-		Body( ): $mol_scroll
-		foot( ): readonly($mol_view)[]
-		Foot( ): $mol_view
-		dom_name( ): string
-		attr( ): ({ 
-			'tabIndex': ReturnType< $mol_page['tabindex'] >,
-		})  & ReturnType< $mol_view['attr'] >
-		sub( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=page.view.tree.d.ts.map
-declare namespace $.$$ {
 }
 
 declare namespace $ {
@@ -38027,21 +37973,21 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    /**
-     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
-     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
-     */
-    function $mol_lights(this: $, next?: boolean): boolean;
-}
 
-declare namespace $ {
-
-	export class $mol_theme_auto extends $mol_plugin {
-		dark( ): string
-		theme( ): ReturnType< $mol_theme_auto['dark'] >
-		light( ): string
+	export class $bog_theme_auto extends $mol_plugin {
+		themes_default( ): readonly(any)[]
+		theme( ): string
+		themes( ): ReturnType< $bog_theme_auto['themes_default'] >
+		theme_light( ): string
+		theme_dark( ): string
+		mode( next?: string ): string
+		mode_next( next?: any ): any
+		theme_next( next?: any ): any
+		theme_prev( next?: any ): any
+		theme_set( next?: any ): any
+		is_light_now( ): boolean
 		attr( ): ({ 
-			'mol_theme': ReturnType< $mol_theme_auto['theme'] >,
+			'mol_theme': ReturnType< $bog_theme_auto['theme'] >,
 		}) 
 	}
 	
@@ -38049,15 +37995,123 @@ declare namespace $ {
 
 //# sourceMappingURL=auto.view.tree.d.ts.map
 declare namespace $.$$ {
-    /**
-     * The [plugin](../../plugin/readme.md) which defines theme based on [mol_lights](../../lights/readme.md).
-     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
-     */
-    class $mol_theme_auto extends $.$mol_theme_auto {
-        theme(): string;
+    type $bog_theme_mode = 'light' | 'dark' | 'system' | 'custom';
+    class $bog_theme_auto extends $.$bog_theme_auto {
+        themes_default(): readonly $.$bog_theme_name[];
+        /** Stores current mode in localStorage. Defaults to 'system'.
+         *  При записи дёргает класс `.bog_theme_switching` на `<html>` —
+         *  это активирует CSS-transition'ы на цветах темы.
+         */
+        mode(next?: $bog_theme_mode): $bog_theme_mode;
+        click_step(next?: number): number;
+        /** 3-click cycle: opposite → back → system. */
+        mode_next(): void;
+        system_light(): boolean;
+        is_light_now(): any;
+        theme_index(next?: number): number;
+        system_theme_index(): number;
+        theme(): any;
+        theme_next(): void;
+        theme_prev(): void;
+        /** Called by picker. Sets mode to light/dark or custom for themed palettes. */
+        theme_set(index: number): void;
     }
 }
 
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	export class $mol_svg extends $mol_view {
+		dom_name( ): string
+		dom_name_space( ): string
+		font_size( ): number
+		font_family( ): string
+		style_size( ): Record<string, any>
+	}
+	
+}
+
+//# sourceMappingURL=svg.view.tree.d.ts.map
+declare namespace $.$$ {
+    /** Base SVG component to display SVG images or icons. */
+    class $mol_svg extends $.$mol_svg {
+        computed_style(): Record<string, any>;
+        font_size(): number;
+        font_family(): any;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	export class $mol_svg_root extends $mol_svg {
+		view_box( ): string
+		aspect( ): string
+		dom_name( ): string
+		attr( ): ({ 
+			'viewBox': ReturnType< $mol_svg_root['view_box'] >,
+			'preserveAspectRatio': ReturnType< $mol_svg_root['aspect'] >,
+		})  & ReturnType< $mol_svg['attr'] >
+	}
+	
+}
+
+//# sourceMappingURL=root.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_svg_path extends $mol_svg {
+		geometry( ): string
+		dom_name( ): string
+		attr( ): ({ 
+			'd': ReturnType< $mol_svg_path['geometry'] >,
+		})  & ReturnType< $mol_svg['attr'] >
+	}
+	
+}
+
+//# sourceMappingURL=path.view.tree.d.ts.map
+declare namespace $ {
+    /**
+     * Fails if `Actual` type is not subtype of `Expected`.
+     */
+    type $mol_type_enforce<Actual extends Expected, Expected> = Actual;
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_svg_path__geometry_mol_icon_1 = $mol_type_enforce<
+		ReturnType< $mol_icon['path'] >
+		,
+		ReturnType< $mol_svg_path['geometry'] >
+	>
+	export class $mol_icon extends $mol_svg_root {
+		path( ): string
+		Path( ): $mol_svg_path
+		view_box( ): string
+		minimal_width( ): number
+		minimal_height( ): number
+		sub( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=icon.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_fingerprint extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=fingerprint.view.tree.d.ts.map
 declare namespace $ {
 
 	export class $mol_paragraph extends $mol_view {
@@ -38085,25 +38139,38 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    interface $mol_locale_dict {
-        [key: string]: string;
-    }
+
+	export class $mol_avatar extends $mol_icon {
+		view_box( ): string
+		id( ): string
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=avatar.view.tree.d.ts.map
+declare namespace $.$$ {
     /**
-     * Localisation in $mol framework
-     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
+     * Avatar uniquely-generated by id string
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_avatar_demo
      */
-    class $mol_locale extends $mol_object {
-        static lang_default(): string;
-        static lang(next?: string): string;
-        static langs_rtl(): string[];
-        static direction(): "ltr" | "rtl";
-        static source(lang: string): any;
-        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
-        static text(key: string): string;
-        static warn(key: string): null;
+    class $mol_avatar extends $.$mol_avatar {
+        path(): string;
     }
 }
 
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	export class $mol_icon_check extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=check.view.tree.d.ts.map
 declare namespace $ {
     /**
      * Z-index values for layers
@@ -38322,28 +38389,62 @@ declare namespace $ {
 
 //# sourceMappingURL=minor.view.tree.d.ts.map
 declare namespace $ {
-}
 
-declare namespace $ {
-
-	export class $mol_button_major extends $mol_button_minor {
-		theme( ): string
-	}
-	
-}
-
-//# sourceMappingURL=major.view.tree.d.ts.map
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_row extends $mol_view {
+	type $mol_view__sub_bog_id_row_1 = $mol_type_enforce<
+		ReturnType< $bog_id_row['face'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_view__sub_bog_id_row_2 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_view__sub_bog_id_row_3 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_view__sub_bog_id_row_4 = $mol_type_enforce<
+		ReturnType< $bog_id_row['info'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_view__sub_bog_id_row_5 = $mol_type_enforce<
+		ReturnType< $bog_id_row['tail'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	export class $bog_id_row extends $mol_button_minor {
+		face( ): readonly(any)[]
+		Face( ): $mol_view
+		name( ): string
+		Name( ): $mol_view
+		note( ): string
+		Note( ): $mol_view
+		info( ): readonly(any)[]
+		Info( ): $mol_view
+		tail( ): readonly(any)[]
+		Tail( ): $mol_view
+		current( ): boolean
+		attr( ): ({ 
+			'bog_id_row_current': ReturnType< $bog_id_row['current'] >,
+		})  & ReturnType< $mol_button_minor['attr'] >
+		sub( ): readonly(any)[]
 	}
 	
 }
 
 //# sourceMappingURL=row.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $bog_id_row extends $.$bog_id_row {
+        info(): $mol_view[];
+    }
+}
+
+declare namespace $.$$ {
+}
+
 declare namespace $ {
     function $mol_support_css_overflow_anchor(this: $): boolean;
 }
@@ -38408,6 +38509,53 @@ declare namespace $.$$ {
 declare namespace $ {
 }
 
+declare namespace $ {
+
+	export class $mol_icon_plus extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=plus.view.tree.d.ts.map
+declare namespace $ {
+    interface $mol_locale_dict {
+        [key: string]: string;
+    }
+    /**
+     * Localisation in $mol framework
+     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
+     */
+    class $mol_locale extends $mol_object {
+        static lang_default(): string;
+        static lang(next?: string): string;
+        static langs_rtl(): string[];
+        static direction(): "ltr" | "rtl";
+        static source(lang: string): any;
+        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
+        static text(key: string): string;
+        static warn(key: string): null;
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_icon_account extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=account.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_account_plus extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=plus.view.tree.d.ts.map
 declare namespace $ {
 
 	export class $mol_hotkey2 extends $mol_plugin {
@@ -38547,37 +38695,38 @@ declare namespace $ {
 
 declare namespace $ {
 
-	type $mol_view__minimal_height_mol_labeler_1 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_view['minimal_height'] >
-	>
-	type $mol_view__sub_mol_labeler_2 = $mol_type_enforce<
-		ReturnType< $mol_labeler['label'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_view__minimal_height_mol_labeler_3 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_view['minimal_height'] >
-	>
-	type $mol_view__sub_mol_labeler_4 = $mol_type_enforce<
-		ReturnType< $mol_labeler['content'] >
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	export class $mol_labeler extends $mol_list {
-		label( ): readonly($mol_view_content)[]
-		Label( ): $mol_view
-		content( ): readonly(any)[]
-		Content( ): $mol_view
-		rows( ): readonly(any)[]
+	export class $mol_button_major extends $mol_button_minor {
+		theme( ): string
 	}
 	
 }
 
-//# sourceMappingURL=labeler.view.tree.d.ts.map
+//# sourceMappingURL=major.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_logout extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=logout.view.tree.d.ts.map
+declare namespace $ {
+    type $bog_id_account_data = {
+        lord: string;
+        name: string;
+        key: string;
+        vault: string;
+    };
+    /** Accounts known on this device */
+    class $bog_id_account extends $mol_object2 {
+        static list(next?: readonly $bog_id_account_data[]): readonly $bog_id_account_data[];
+        static find(lord: string): $bog_id_account_data | null;
+        static merge(data: $bog_id_account_data): $bog_id_account_data[];
+        static put(data: $bog_id_account_data): void;
+    }
+}
+
 declare namespace $ {
     /** Seals Giper Baza Auth with passkey secret */
     class $bog_id_vault extends $mol_object2 {
@@ -38589,238 +38738,408 @@ declare namespace $ {
 
 declare namespace $ {
 
-	type $mol_paragraph__title_bog_id_app_1 = $mol_type_enforce<
-		ReturnType< $bog_id_app['consent_text'] >
+	type $bog_theme_auto__theme_light_bog_id_app_1 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_theme_auto['theme_light'] >
+	>
+	type $bog_theme_auto__theme_dark_bog_id_app_2 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_theme_auto['theme_dark'] >
+	>
+	type $mol_view__sub_bog_id_app_3 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	type $mol_paragraph__title_bog_id_app_4 = $mol_type_enforce<
+		ReturnType< $bog_id_app['head'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_2 = $mol_type_enforce<
+	type $mol_avatar__id_bog_id_app_5 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_id'] >
+		,
+		ReturnType< $mol_avatar['id'] >
+	>
+	type $bog_id_row__current_bog_id_app_6 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_current'] >
+		,
+		ReturnType< $bog_id_row['current'] >
+	>
+	type $bog_id_row__name_bog_id_app_7 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_name'] >
+		,
+		ReturnType< $bog_id_row['name'] >
+	>
+	type $bog_id_row__note_bog_id_app_8 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_note'] >
+		,
+		ReturnType< $bog_id_row['note'] >
+	>
+	type $bog_id_row__click_bog_id_app_9 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_open'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_10 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $bog_id_row__tail_bog_id_app_11 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_tail'] >
+		,
+		ReturnType< $bog_id_row['tail'] >
+	>
+	type $mol_list__rows_bog_id_app_12 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_rows'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $bog_id_row__name_bog_id_app_13 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_paragraph['title'] >
+		ReturnType< $bog_id_row['name'] >
 	>
-	type $mol_button_major__title_bog_id_app_3 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_14 = $mol_type_enforce<
+		ReturnType< $bog_id_app['add_open'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_15 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $bog_id_row__name_bog_id_app_16 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_button_major['title'] >
+		ReturnType< $bog_id_row['name'] >
 	>
-	type $mol_button_major__enabled_bog_id_app_4 = $mol_type_enforce<
-		ReturnType< $bog_id_app['approve_enabled'] >
+	type $bog_id_row__note_bog_id_app_17 = $mol_type_enforce<
+		string
 		,
-		ReturnType< $mol_button_major['enabled'] >
+		ReturnType< $bog_id_row['note'] >
 	>
-	type $mol_button_major__click_bog_id_app_5 = $mol_type_enforce<
-		ReturnType< $bog_id_app['approve'] >
+	type $bog_id_row__click_bog_id_app_18 = $mol_type_enforce<
+		ReturnType< $bog_id_app['passkey_enter'] >
 		,
-		ReturnType< $mol_button_major['click'] >
+		ReturnType< $bog_id_row['click'] >
 	>
-	type $mol_button_minor__title_bog_id_app_6 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_19 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $bog_id_row__name_bog_id_app_20 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_id_row['name'] >
+	>
+	type $bog_id_row__note_bog_id_app_21 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_id_row['note'] >
+	>
+	type $bog_id_row__click_bog_id_app_22 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_make'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_23 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $bog_id_row['face'] >
+	>
+	type $mol_button_minor__title_bog_id_app_24 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_7 = $mol_type_enforce<
-		ReturnType< $bog_id_app['reject'] >
+	type $mol_button_minor__click_bog_id_app_25 = $mol_type_enforce<
+		ReturnType< $bog_id_app['add_close'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_row__sub_bog_id_app_8 = $mol_type_enforce<
-		readonly(any)[]
+	type $mol_paragraph__title_bog_id_app_26 = $mol_type_enforce<
+		ReturnType< $bog_id_app['enter_status'] >
 		,
-		ReturnType< $mol_row['sub'] >
+		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_list__rows_bog_id_app_9 = $mol_type_enforce<
-		ReturnType< $bog_id_app['consent_rows'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_string__hint_bog_id_app_10 = $mol_type_enforce<
+	type $mol_string__hint_bog_id_app_27 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_string['hint'] >
 	>
-	type $mol_string__value_bog_id_app_11 = $mol_type_enforce<
+	type $mol_string__value_bog_id_app_28 = $mol_type_enforce<
+		ReturnType< $bog_id_app['name_draft'] >
+		,
+		ReturnType< $mol_string['value'] >
+	>
+	type $mol_paragraph__title_bog_id_app_29 = $mol_type_enforce<
+		ReturnType< $bog_id_app['consent_text'] >
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_paragraph__title_bog_id_app_30 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_major__title_bog_id_app_31 = $mol_type_enforce<
+		ReturnType< $bog_id_app['approve_title'] >
+		,
+		ReturnType< $mol_button_major['title'] >
+	>
+	type $mol_button_major__enabled_bog_id_app_32 = $mol_type_enforce<
+		ReturnType< $bog_id_app['approve_enabled'] >
+		,
+		ReturnType< $mol_button_major['enabled'] >
+	>
+	type $mol_button_major__click_bog_id_app_33 = $mol_type_enforce<
+		ReturnType< $bog_id_app['approve'] >
+		,
+		ReturnType< $mol_button_major['click'] >
+	>
+	type $mol_button_minor__title_bog_id_app_34 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_button_minor['title'] >
+	>
+	type $mol_button_minor__click_bog_id_app_35 = $mol_type_enforce<
+		ReturnType< $bog_id_app['reject'] >
+		,
+		ReturnType< $mol_button_minor['click'] >
+	>
+	type $mol_list__rows_bog_id_app_36 = $mol_type_enforce<
+		ReturnType< $bog_id_app['login_rows'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_paragraph__title_bog_id_app_37 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_string__hint_bog_id_app_38 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_string['hint'] >
+	>
+	type $mol_string__value_bog_id_app_39 = $mol_type_enforce<
 		ReturnType< $bog_id_app['name'] >
 		,
 		ReturnType< $mol_string['value'] >
 	>
-	type $mol_labeler__title_bog_id_app_12 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_labeler['title'] >
-	>
-	type $mol_labeler__content_bog_id_app_13 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_labeler['content'] >
-	>
-	type $mol_paragraph__title_bog_id_app_14 = $mol_type_enforce<
-		ReturnType< $bog_id_app['lord'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_labeler__title_bog_id_app_15 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_labeler['title'] >
-	>
-	type $mol_labeler__content_bog_id_app_16 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_labeler['content'] >
-	>
-	type $mol_button_minor__title_bog_id_app_17 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_40 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_bind_title'] >
 		,
-		ReturnType< $mol_button_minor['title'] >
+		ReturnType< $bog_id_row['name'] >
 	>
-	type $mol_button_minor__click_bog_id_app_18 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_41 = $mol_type_enforce<
+		ReturnType< $bog_id_app['bind_note'] >
+		,
+		ReturnType< $bog_id_row['note'] >
+	>
+	type $bog_id_row__click_bog_id_app_42 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_bind'] >
 		,
-		ReturnType< $mol_button_minor['click'] >
+		ReturnType< $bog_id_row['click'] >
 	>
-	type $mol_button_minor__title_bog_id_app_19 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['title'] >
-	>
-	type $mol_button_minor__click_bog_id_app_20 = $mol_type_enforce<
-		ReturnType< $bog_id_app['passkey_enter'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_row__sub_bog_id_app_21 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_43 = $mol_type_enforce<
 		readonly(any)[]
 		,
-		ReturnType< $mol_row['sub'] >
+		ReturnType< $bog_id_row['face'] >
 	>
-	type $mol_paragraph__title_bog_id_app_22 = $mol_type_enforce<
-		ReturnType< $bog_id_app['passkey_status'] >
+	type $mol_paragraph__title_bog_id_app_44 = $mol_type_enforce<
+		ReturnType< $bog_id_app['bind_status'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_labeler__title_bog_id_app_23 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_45 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_labeler['title'] >
+		ReturnType< $bog_id_row['name'] >
 	>
-	type $mol_labeler__content_bog_id_app_24 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_46 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $bog_id_row['note'] >
+	>
+	type $bog_id_row__click_bog_id_app_47 = $mol_type_enforce<
+		ReturnType< $bog_id_app['account_exit'] >
+		,
+		ReturnType< $bog_id_row['click'] >
+	>
+	type $bog_id_row__face_bog_id_app_48 = $mol_type_enforce<
 		readonly(any)[]
 		,
-		ReturnType< $mol_labeler['content'] >
+		ReturnType< $bog_id_row['face'] >
 	>
-	type $mol_paragraph__title_bog_id_app_25 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_49 = $mol_type_enforce<
+		ReturnType< $bog_id_app['profile_rows'] >
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	type $mol_paragraph__title_bog_id_app_50 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_paragraph__title_bog_id_app_51 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_title'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_minor__title_bog_id_app_26 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_52 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__enabled_bog_id_app_27 = $mol_type_enforce<
+	type $mol_button_minor__enabled_bog_id_app_53 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_active'] >
 		,
 		ReturnType< $mol_button_minor['enabled'] >
 	>
-	type $mol_button_minor__click_bog_id_app_28 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_54 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_revoke'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_row__sub_bog_id_app_29 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_55 = $mol_type_enforce<
 		readonly(any)[]
 		,
-		ReturnType< $mol_row['sub'] >
+		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_paragraph__title_bog_id_app_30 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_56 = $mol_type_enforce<
 		ReturnType< $bog_id_app['app_title'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_minor__title_bog_id_app_31 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_57 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_32 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_58 = $mol_type_enforce<
 		ReturnType< $bog_id_app['app_revoke'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_row__sub_bog_id_app_33 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_59 = $mol_type_enforce<
 		readonly(any)[]
 		,
-		ReturnType< $mol_row['sub'] >
+		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_list__rows_bog_id_app_34 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_60 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_parts'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_id_app_35 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_61 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_labeler__title_bog_id_app_36 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_labeler['title'] >
-	>
-	type $mol_labeler__content_bog_id_app_37 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_62 = $mol_type_enforce<
 		readonly(any)[]
 		,
-		ReturnType< $mol_labeler['content'] >
+		ReturnType< $mol_list['rows'] >
 	>
-	export class $bog_id_app extends $mol_page {
-		Theme( ): $mol_theme_auto
+	type $mol_view__sub_bog_id_app_63 = $mol_type_enforce<
+		ReturnType< $bog_id_app['panels'] >
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	export class $bog_id_app extends $mol_scroll {
+		Theme( ): $bog_theme_auto
+		Brand_icon( ): $mol_icon_fingerprint
+		Brand( ): $mol_view
+		head( ): string
+		Head( ): $mol_paragraph
+		account_current( id: any): boolean
+		account_name( id: any): string
+		account_note( id: any): string
+		account_open( id: any, next?: any ): any
+		account_id( id: any): string
+		Account_face( id: any): $mol_avatar
+		Account_check( id: any): $mol_icon_check
+		account_tail( id: any): readonly(any)[]
+		Account( id: any): $bog_id_row
+		account_rows( ): readonly(any)[]
+		Accounts( ): $mol_list
+		add_open( next?: any ): any
+		Add_icon( ): $mol_icon_plus
+		Add( ): $bog_id_row
+		passkey_enter( next?: any ): any
+		Enter_icon( ): $mol_icon_fingerprint
+		Enter( ): $bog_id_row
+		account_make( next?: any ): any
+		Make_icon( ): $mol_icon_account_plus
+		Make( ): $bog_id_row
+		add_close( next?: any ): any
+		Back( ): $mol_button_minor
+		enter_status( ): string
+		Enter_status( ): $mol_paragraph
+		name_draft( next?: string ): string
+		Draft( ): $mol_string
 		consent_text( ): string
 		Consent_text( ): $mol_paragraph
 		Consent_self( ): $mol_paragraph
+		approve_title( ): string
 		approve_enabled( ): boolean
 		approve( next?: any ): any
 		Approve( ): $mol_button_major
 		reject( next?: any ): any
 		Reject( ): $mol_button_minor
-		Consent_tools( ): $mol_row
-		consent_rows( ): readonly(any)[]
-		Consent( ): $mol_list
+		login_rows( ): readonly(any)[]
+		Login( ): $mol_list
+		Profile_head( ): $mol_paragraph
 		name( next?: string ): string
 		Name( ): $mol_string
-		Name_label( ): $mol_labeler
-		lord( ): string
-		Lord( ): $mol_paragraph
-		Lord_label( ): $mol_labeler
 		passkey_bind_title( ): string
+		bind_note( ): string
 		passkey_bind( next?: any ): any
-		Passkey_bind( ): $mol_button_minor
-		passkey_enter( next?: any ): any
-		Passkey_enter( ): $mol_button_minor
-		Passkey_tools( ): $mol_row
-		passkey_status( ): string
-		Passkey_status( ): $mol_paragraph
-		Passkey_label( ): $mol_labeler
+		Bind_icon( ): $mol_icon_fingerprint
+		Bind( ): $bog_id_row
+		bind_status( ): string
+		Bind_status( ): $mol_paragraph
+		account_exit( next?: any ): any
+		Exit_icon( ): $mol_icon_logout
+		Exit( ): $bog_id_row
+		profile_rows( ): readonly(any)[]
+		Profile( ): $mol_list
+		Grants_head( ): $mol_paragraph
 		grant_title( id: any): string
 		Grant_title( id: any): $mol_paragraph
 		grant_active( id: any): boolean
 		grant_revoke( id: any, next?: any ): any
 		Grant_revoke( id: any): $mol_button_minor
-		Grant_head( id: any): $mol_row
+		Grant_head( id: any): $mol_view
 		app_title( id: any): string
 		App_title( id: any): $mol_paragraph
 		app_revoke( id: any, next?: any ): any
 		App_revoke( id: any): $mol_button_minor
-		App( id: any): $mol_row
+		App( id: any): $mol_view
 		grant_parts( id: any): readonly(any)[]
 		Grant( id: any): $mol_list
 		grant_rows( ): readonly(any)[]
 		Grants( ): $mol_list
-		Grants_label( ): $mol_labeler
+		Grants_panel( ): $mol_list
+		panels( ): readonly(any)[]
+		Column( ): $mol_view
 		title( ): string
 		plugins( ): readonly(any)[]
-		body( ): readonly(any)[]
+		sub( ): readonly(any)[]
+		head_pick( ): string
+		head_own( ): string
+		head_add( ): string
+		account_locked( ): string
+		account_noname( ): string
+		approve_as( ): string
+		approve_plain( ): string
 		consent_template( ): string
 		grant_template( ): string
 		device_template( ): string
@@ -38828,7 +39147,13 @@ declare namespace $ {
 		passkey_done( ): string
 		passkey_none( ): string
 		passkey_wait( ): string
+		passkey_offline( ): string
+		passkey_unsaved( ): string
 		passkey_wrong( ): string
+		passkey_foreign( ): string
+		passkey_cancel( ): string
+		passkey_noprf( ): string
+		passkey_again( ): string
 	}
 	
 }
@@ -38866,9 +39191,38 @@ declare namespace $.$$ {
         request(next?: $bog_id_app_request | null): $bog_id_app_request | null;
         request_pass(): $giper_baza_auth_pass | null;
         request_self(): boolean;
-        body(): ($.$mol_list | $mol_labeler)[];
-        consent_rows(): ($.$mol_paragraph | $mol_row)[];
+        panels(): $.$mol_list[];
+        login_rows(): ($mol_view | $.$mol_paragraph | $.$bog_id_row | $.$mol_string)[];
+        add_rows(): ($.$mol_paragraph | $.$bog_id_row | $mol_button_minor)[];
+        pick_rows(): ($.$mol_paragraph | $.$bog_id_row | $mol_button_minor | $.$mol_list | $.$mol_string)[];
+        profile_rows(): ($.$mol_paragraph | $.$bog_id_row | $.$mol_string)[];
+        head(): string;
+        adding(next?: boolean): boolean;
+        add_open(): void;
+        add_close(): void;
+        account_self(key?: string): $bog_id_account_data;
+        key(): string;
+        accounts(): $bog_id_account_data[];
+        account(lord: string): $bog_id_account_data;
+        account_rows(): $.$bog_id_row[];
+        account_id(lord: string): string;
+        account_current(lord: string): boolean;
+        account_name(lord: string): string;
+        account_note(lord: string): string;
+        account_tail(lord: string): $mol_icon_check[];
+        account_open(lord: string): void;
+        account_make(): void;
+        account_make_run(): void;
+        account_exit(): void;
+        account_exit_run(): void;
+        account_fresh(): string;
+        account_switch(key: string, keep?: string): void;
+        home_saving(): void;
+        account_write(self: $bog_id_account_data, key: string): void;
+        connected(): boolean;
         consent_text(): string;
+        approve_title(): string;
+        name_apply(): void;
         approve_enabled(): boolean;
         approve(): void;
         reject(): void;
@@ -38898,7 +39252,7 @@ declare namespace $.$$ {
         rotate_write(grant: $bog_id_grant, drop: readonly string[] | null): void;
         rotate(id: string, drop: readonly string[] | null): void;
         grant_rows(): $.$mol_list[];
-        grant_parts(id: string): $mol_row[];
+        grant_parts(id: string): $mol_view[];
         grant_title(id: string): string;
         grant_active(id: string): boolean;
         grant_revoke(id: string): void;
@@ -38908,15 +39262,25 @@ declare namespace $.$$ {
         vault_of(lord: string): string;
         passkey_salt(): Uint8Array<ArrayBuffer>;
         passkey_bind_title(): string;
+        bind_note(): string;
         passkey_error(next?: string): string;
-        passkey_status(): string;
+        enter_status(): string;
+        bind_status(): string;
+        passkey_fail(error: Error): string | undefined;
+        passkey_id: Uint8Array<ArrayBuffer> | null;
         passkey_bind(): void;
         passkey_bind_run(): Promise<void>;
+        passkey_key(): Promise<any>;
+        vault_add(vault: string): void;
         passkey_enter(): void;
-        passkey_enter_run(): Promise<void>;
+        passkey_enter_run(): Promise<string | undefined>;
         restore(next?: $bog_id_app_restore | null): $bog_id_app_restore | null;
         restoring(): string;
+        vault_key(vaults: string, restore: $bog_id_app_restore): Promise<string>;
     }
+}
+
+declare namespace $.$$ {
 }
 
 export = $;

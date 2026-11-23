@@ -129,6 +129,7 @@
     "$mol_dom_context",
     "$mol_dom",
     "$mol_storage",
+    "$mol_mem_persist",
     "$mol_state_time",
     "$mol_file",
     "$mol_file_base",
@@ -329,7 +330,8 @@
     "$mol_html_encode",
     "$mol_html",
     "$bog_id_login",
-    "$bog_id_land"
+    "$bog_id_land",
+    "$bog_id_yard"
   ],
   "dependencies": {
     "autoinstall": "*",

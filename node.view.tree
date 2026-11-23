@@ -8,35 +8,48 @@ $mol_scroll $mol_view
 		^
 		scroll? <=> event_scroll? null
 
-$mol_page $mol_view
-	dom_name \article
+$bog_theme_auto $mol_plugin
+	themes <= themes_default /
+	theme_light \$mol_theme_light
+	theme_dark \$mol_theme_dark
+	mode? \system
+	mode_next? null
+	theme_next? null
+	theme_prev? null
+	theme_set? null
+	is_light_now false
+	attr * mol_theme <= theme \
+
+$mol_svg $mol_view
+	dom_name \svg
+	dom_name_space \http://www.w3.org/2000/svg
+	font_size 16
+	font_family \
+	style_size *
+
+$mol_svg_root $mol_svg
+	dom_name \svg
 	attr *
 		^
-		tabIndex <= tabindex -1
-	sub /
-		<= Head $mol_view
-			minimal_height 64
-			dom_name \header
-			sub <= head /
-				<= Title $mol_view
-					dom_name \h1
-					sub <= title_content /
-						<= Logo null
-						<= title
-				<= Tools $mol_view
-					sub <= tools /$mol_view_content
-		<= Body $mol_scroll
-			scroll_top? => body_scroll_top?
-			sub <= body_content /
-				<= Body_content $mol_view
-					sub <= body /$mol_view
-		<= Foot $mol_view
-			dom_name \footer
-			sub <= foot /$mol_view
+		viewBox <= view_box \0 0 100 100
+		preserveAspectRatio <= aspect \xMidYMid
 
-$mol_theme_auto $mol_plugin
-	light \$mol_theme_light
-	attr * mol_theme <= theme <= dark \$mol_theme_dark
+$mol_svg_path $mol_svg
+	dom_name \path
+	attr *
+		^
+		d <= geometry \
+
+
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
+	sub /
+		<= Path $mol_svg_path
+			geometry <= path \
+
+$mol_icon_fingerprint $mol_icon path \M17.81,4.47C17.73,4.47 17.65,4.45 17.58,4.41C15.66,3.42 14,3 12,3C10.03,3 8.15,3.47 6.44,4.41C6.2,4.54 5.9,4.45 5.76,4.21C5.63,3.97 5.72,3.66 5.96,3.53C7.82,2.5 9.86,2 12,2C14.14,2 16,2.47 18.04,3.5C18.29,3.65 18.38,3.95 18.25,4.19C18.16,4.37 18,4.47 17.81,4.47M3.5,9.72C3.4,9.72 3.3,9.69 3.21,9.63C3,9.47 2.93,9.16 3.09,8.93C4.08,7.53 5.34,6.43 6.84,5.66C10,4.04 14,4.03 17.15,5.65C18.65,6.42 19.91,7.5 20.9,8.9C21.06,9.12 21,9.44 20.78,9.6C20.55,9.76 20.24,9.71 20.08,9.5C19.18,8.22 18.04,7.23 16.69,6.54C13.82,5.07 10.15,5.07 7.29,6.55C5.93,7.25 4.79,8.25 3.89,9.5C3.81,9.65 3.66,9.72 3.5,9.72M9.75,21.79C9.62,21.79 9.5,21.74 9.4,21.64C8.53,20.77 8.06,20.21 7.39,19C6.7,17.77 6.34,16.27 6.34,14.66C6.34,11.69 8.88,9.27 12,9.27C15.12,9.27 17.66,11.69 17.66,14.66A0.5,0.5 0 0,1 17.16,15.16A0.5,0.5 0 0,1 16.66,14.66C16.66,12.24 14.57,10.27 12,10.27C9.43,10.27 7.34,12.24 7.34,14.66C7.34,16.1 7.66,17.43 8.27,18.5C8.91,19.66 9.35,20.15 10.12,20.93C10.31,21.13 10.31,21.44 10.12,21.64C10,21.74 9.88,21.79 9.75,21.79M16.92,19.94C15.73,19.94 14.68,19.64 13.82,19.05C12.33,18.04 11.44,16.4 11.44,14.66A0.5,0.5 0 0,1 11.94,14.16A0.5,0.5 0 0,1 12.44,14.66C12.44,16.07 13.16,17.4 14.38,18.22C15.09,18.7 15.92,18.93 16.92,18.93C17.16,18.93 17.56,18.9 17.96,18.83C18.23,18.78 18.5,18.96 18.54,19.24C18.59,19.5 18.41,19.77 18.13,19.82C17.56,19.93 17.06,19.94 16.92,19.94M14.91,22C14.87,22 14.82,22 14.78,22C13.19,21.54 12.15,20.95 11.06,19.88C9.66,18.5 8.89,16.64 8.89,14.66C8.89,13.04 10.27,11.72 11.97,11.72C13.67,11.72 15.05,13.04 15.05,14.66C15.05,15.73 16,16.6 17.13,16.6C18.28,16.6 19.21,15.73 19.21,14.66C19.21,10.89 15.96,7.83 11.96,7.83C9.12,7.83 6.5,9.41 5.35,11.86C4.96,12.67 4.76,13.62 4.76,14.66C4.76,15.44 4.83,16.67 5.43,18.27C5.53,18.53 5.4,18.82 5.14,18.91C4.88,19 4.59,18.87 4.5,18.62C4,17.31 3.77,16 3.77,14.66C3.77,13.46 4,12.37 4.45,11.42C5.78,8.63 8.73,6.82 11.96,6.82C16.5,6.82 20.21,10.33 20.21,14.65C20.21,16.27 18.83,17.59 17.13,17.59C15.43,17.59 14.05,16.27 14.05,14.65C14.05,13.58 13.12,12.71 11.97,12.71C10.82,12.71 9.89,13.58 9.89,14.65C9.89,16.36 10.55,17.96 11.76,19.16C12.71,20.1 13.62,20.62 15.03,21C15.3,21.08 15.45,21.36 15.38,21.62C15.33,21.85 15.12,22 14.91,22Z
 
 $mol_paragraph $mol_view
 	line_height 24
@@ -44,6 +57,13 @@ $mol_paragraph $mol_view
 	width_limit +Infinity
 	row_width 0
 	sub / <= title
+
+$mol_avatar $mol_icon
+	view_box \0 0 24 24
+	id \
+	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
+
+$mol_icon_check $mol_icon path \M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z
 
 $mol_speck $mol_view
 	theme \$mol_theme_accent
@@ -77,10 +97,24 @@ $mol_button_typed $mol_button
 
 $mol_button_minor $mol_button_typed
 
-$mol_button_major $mol_button_minor
-	theme \$mol_theme_base
-
-$mol_row $mol_view
+$bog_id_row $mol_button_minor
+	current false
+	attr *
+		^
+		bog_id_row_current <= current
+	sub /
+		<= Face $mol_view
+			sub <= face /
+		<= Info $mol_view
+			sub <= info /
+				<= Name $mol_view
+					sub /
+						<= name \
+				<= Note $mol_view
+					sub /
+						<= note \
+		<= Tail $mol_view
+			sub <= tail /
 
 $mol_list $mol_view
 	render_visible_only true
@@ -95,6 +129,12 @@ $mol_list $mol_view
 	view_window /
 		0
 		0
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_icon_account $mol_icon path \M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z
+
+$mol_icon_account_plus $mol_icon path \M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z
 
 $mol_hotkey2 $mol_plugin
 	event *
@@ -142,87 +182,138 @@ $mol_string $mol_view
 			mod_ctrl <= submit_with_ctrl false
 			key * enter? <=> submit? null
 
-$mol_labeler $mol_list
-	rows /
-		<= Label $mol_view
-			minimal_height 32
-			sub <= label /$mol_view_content
-				<= title
-		<= Content $mol_view
-			minimal_height 24
-			sub <= content /
+$mol_button_major $mol_button_minor
+	theme \$mol_theme_base
 
-$bog_id_app $mol_page
+$mol_icon_logout $mol_icon path \M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z
+
+$bog_id_app $mol_scroll
 	title @ \Гипер ID
 	plugins /
-		<= Theme $mol_theme_auto
-	body /
-		<= Consent $mol_list
-			rows <= consent_rows /
-				<= Consent_text $mol_paragraph
-					title <= consent_text \
-				<= Consent_self $mol_paragraph
-					title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
-				<= Consent_tools $mol_row
-					sub /
+		<= Theme $bog_theme_auto
+			theme_light \$mol_theme_calm_light
+			theme_dark \$mol_theme_calm_dark
+	sub /
+		<= Column $mol_view
+			sub <= panels /
+				<= Login $mol_list
+					rows <= login_rows /
+						<= Brand $mol_view
+							sub /
+								<= Brand_icon $mol_icon_fingerprint
+								<= title
+						<= Head $mol_paragraph
+							title <= head \
+						<= Accounts $mol_list
+							rows <= account_rows /
+								<= Account* $bog_id_row
+									current <= account_current* false
+									name <= account_name* \
+									note <= account_note* \
+									click? <=> account_open*? null
+									face /
+										<= Account_face* $mol_avatar
+											id <= account_id* \
+									tail <= account_tail* /
+										<= Account_check* $mol_icon_check
+						<= Add $bog_id_row
+							name @ \Добавить аккаунт
+							click? <=> add_open? null
+							face /
+								<= Add_icon $mol_icon_plus
+						<= Enter $bog_id_row
+							name @ \Войти по биометрии
+							note @ \Отпечаток, лицо или ключ доступа
+							click? <=> passkey_enter? null
+							face /
+								<= Enter_icon $mol_icon_fingerprint
+						<= Make $bog_id_row
+							name @ \Создать новый аккаунт
+							note @ \С отдельным ключом и приложениями
+							click? <=> account_make? null
+							face /
+								<= Make_icon $mol_icon_account_plus
+						<= Back $mol_button_minor
+							title @ \Назад
+							click? <=> add_close? null
+						<= Enter_status $mol_paragraph
+							title <= enter_status \
+						<= Draft $mol_string
+							hint @ \Как вас зовут
+							value? <=> name_draft? \
+						<= Consent_text $mol_paragraph
+							title <= consent_text \
+						<= Consent_self $mol_paragraph
+							title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
 						<= Approve $mol_button_major
-							title @ \Разрешить
+							title <= approve_title \
 							enabled <= approve_enabled true
 							click? <=> approve? null
 						<= Reject $mol_button_minor
-							title @ \Отклонить
+							title @ \Отмена
 							click? <=> reject? null
-		<= Name_label $mol_labeler
-			title @ \Имя
-			content /
-				<= Name $mol_string
-					hint @ \Как вас показывать приложениям
-					value? <=> name? \
-		<= Lord_label $mol_labeler
-			title @ \Ваш лорд
-			content /
-				<= Lord $mol_paragraph
-					title <= lord \
-		<= Passkey_label $mol_labeler
-			title @ \Passkey
-			content /
-				<= Passkey_tools $mol_row
-					sub /
-						<= Passkey_bind $mol_button_minor
-							title <= passkey_bind_title @ \Привязать passkey
+				<= Profile $mol_list
+					rows <= profile_rows /
+						<= Profile_head $mol_paragraph
+							title @ \Профиль
+						<= Name $mol_string
+							hint @ \Как вас показывать приложениям
+							value? <=> name? \
+						<= Bind $bog_id_row
+							name <= passkey_bind_title @ \Включить вход по биометрии
+							note <= bind_note \
 							click? <=> passkey_bind? null
-						<= Passkey_enter $mol_button_minor
-							title @ \Войти по passkey
-							click? <=> passkey_enter? null
-				<= Passkey_status $mol_paragraph
-					title <= passkey_status \
-		<= Grants_label $mol_labeler
-			title @ \Подключённые приложения
-			content /
-				<= Grants $mol_list
-					rows <= grant_rows /
-						<= Grant* $mol_list
-							rows <= grant_parts* /
-								<= Grant_head* $mol_row
-									sub /
-										<= Grant_title* $mol_paragraph
-											title <= grant_title* \
-										<= Grant_revoke* $mol_button_minor
-											title @ \Отозвать всё
-											enabled <= grant_active* true
-											click? <=> grant_revoke*? null
-								<= App* $mol_row
-									sub /
-										<= App_title* $mol_paragraph
-											title <= app_title* \
-										<= App_revoke* $mol_button_minor
-											title @ \Отозвать
-											click? <=> app_revoke*? null
-	consent_template @ \{app} просит доступ «{scope}»
+							face /
+								<= Bind_icon $mol_icon_fingerprint
+						<= Bind_status $mol_paragraph
+							title <= bind_status \
+						<= Exit $bog_id_row
+							name @ \Выйти на этом устройстве
+							note @ \Вернуться можно по биометрии
+							click? <=> account_exit? null
+							face /
+								<= Exit_icon $mol_icon_logout
+				<= Grants_panel $mol_list
+					rows /
+						<= Grants_head $mol_paragraph
+							title @ \Подключённые приложения
+						<= Grants $mol_list
+							rows <= grant_rows /
+								<= Grant* $mol_list
+									rows <= grant_parts* /
+										<= Grant_head* $mol_view
+											sub /
+												<= Grant_title* $mol_paragraph
+													title <= grant_title* \
+												<= Grant_revoke* $mol_button_minor
+													title @ \Отозвать всё
+													enabled <= grant_active* true
+													click? <=> grant_revoke*? null
+										<= App* $mol_view
+											sub /
+												<= App_title* $mol_paragraph
+													title <= app_title* \
+												<= App_revoke* $mol_button_minor
+													title @ \Отозвать
+													click? <=> app_revoke*? null
+	head_pick @ \Выберите аккаунт для входа в {app}
+	head_own @ \Ваши аккаунты
+	head_add @ \Добавление аккаунта
+	account_locked @ \Нужен вход по биометрии
+	account_noname @ \Без имени
+	approve_as @ \Войти как {name}
+	approve_plain @ \Войти
+	consent_template @ \Приложение получит доступ к разделу «{scope}» и увидит ваше имя. Ключ аккаунта остаётся у вас
 	grant_template @ \{app} · {scope}
 	device_template @ \Устройство {lord}
-	passkey_rebind_title @ \Перепривязать passkey
-	passkey_done @ \Passkey привязан, ключ зашифрован им в Базе
-	passkey_none @ \Привяжите passkey, чтобы войти с другого устройства
+	passkey_rebind_title @ \Привязать ещё одну биометрию
+	passkey_done @ \Вход по биометрии включён
+	passkey_none @ \Без неё аккаунт живёт только в этом браузере
 	passkey_wait @ \Ждём зашифрованный ключ из Базы…
-	passkey_wrong @ \Этот passkey не открывает ключ
+	passkey_offline @ \Нет связи с Гипер Базой. Вход продолжится сам, когда она появится
+	passkey_unsaved @ \Нет связи с Гипер Базой: пока войти можно только на этом устройстве
+	passkey_wrong @ \Этот ключ доступа не открывает аккаунт
+	passkey_foreign @ \Это ключ доступа другого приложения. Выберите другой
+	passkey_cancel @ \Вход отменён или на устройстве нет подходящего ключа
+	passkey_noprf @ \Браузер или хранилище ключей не поддерживает PRF. Попробуйте связку ключей iCloud, Google или другой браузер
+	passkey_again @ \Ключ создан. Нажмите ещё раз, чтобы подтвердить

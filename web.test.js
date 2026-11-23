@@ -2538,6 +2538,18 @@ var $;
 var $;
 (function ($) {
     $mol_test({
+        async 'storage level'() {
+            // prevent async in tests
+            await $mol_wire_async($mol_storage).level();
+        }
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_test({
         'local get set delete'() {
             var key = '$mol_state_local_test:' + Math.random();
             $mol_assert_equal($mol_state_local.value(key), null);
@@ -7445,6 +7457,30 @@ var $;
 ;
 "use strict";
 var $;
+(function ($_1) {
+    $mol_test({
+        'put keeps order and replaces by lord'($) {
+            $.$bog_id_account = class extends $.$bog_id_account {
+                static list(next = this.memory) {
+                    return this.memory = next;
+                }
+                static memory = [];
+            };
+            const make = (lord, name) => ({ lord, name, key: '', vault: '' });
+            const Account = $.$bog_id_account;
+            Account.put(make('a', 'Ann'));
+            Account.put(make('b', 'Bob'));
+            Account.put(make('a', 'Anna'));
+            $mol_assert_equal(Account.list().map(data => data.name), ['Anna', 'Bob']);
+            $mol_assert_equal(Account.find('b').name, 'Bob');
+            $mol_assert_equal(Account.find('c'), null);
+        },
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
 (function ($) {
     /** Resolves Pointer from Giper ID grant to current data Land */
     function $bog_id_land(pointer) {
@@ -7453,6 +7489,68 @@ var $;
         return link ? glob.Land(new $giper_baza_link(link)) : null;
     }
     $.$bog_id_land = $bog_id_land;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function parse(theme) {
+        if (theme === 'true')
+            return true;
+        if (theme === 'false')
+            return false;
+        return null;
+    }
+    // Get once because chrome switches to light on print
+    const base = $.$mol_media.match('(prefers-color-scheme: light)');
+    /**
+     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+     */
+    function $mol_lights(next) {
+        const arg = parse(this.$mol_state_arg.value('mol_lights'));
+        if (next === undefined) {
+            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
+        }
+        else {
+            if (arg === null) {
+                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            }
+            else {
+                this.$mol_state_arg.value('mol_lights', String(next));
+            }
+            return next;
+        }
+    }
+    $.$mol_lights = $mol_lights;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test({
+        'system mode follows the device, not a light choice stored by another app'($) {
+            const device = (light) => {
+                const context = Object.create($);
+                context.$mol_lights = () => !light;
+                context.$mol_media = class extends $.$mol_media {
+                    static match() {
+                        return light;
+                    }
+                };
+                return $bog_theme_auto.make({ $: context });
+            };
+            const night = device(false);
+            $mol_assert_equal(night.mode(), 'system');
+            $mol_assert_equal(night.theme(), night.theme_dark());
+            $mol_assert_equal(night.is_light_now(), false);
+            const day = device(true);
+            $mol_assert_equal(day.theme(), day.theme_light());
+            $mol_assert_equal(day.is_light_now(), true);
+        },
+    });
 })($ || ($ = {}));
 
 ;
@@ -7478,6 +7576,26 @@ var $;
     var $$;
     (function ($$) {
         $mol_test({
+            async 'signed out account stays in list and asks for passkey'($) {
+                $.$bog_id_account = class extends $.$bog_id_account {
+                    static list(next = this.memory) {
+                        return this.memory = next;
+                    }
+                    static memory = [];
+                };
+                const app = $bog_id_app.make({ $ });
+                const other = { lord: 'other', name: 'Анна', key: '', vault: 'vault' };
+                let entered = 0;
+                app.passkey_enter = () => { ++entered; };
+                $.$bog_id_account.put(other);
+                $mol_assert_equal(app.account_rows().length, 2);
+                $mol_assert_equal(app.account_name('other'), 'Анна');
+                $mol_assert_equal(app.account_current(app.lord()), true);
+                app.account_open('other');
+                $mol_assert_equal(entered, 1);
+                app.account_open(app.lord());
+                $mol_assert_equal(entered, 1);
+            },
             async 'revoke of one device rotates land and keeps data for others'($) {
                 const app = $bog_id_app.make({ $ });
                 const keep = (name, task) => new $mol_wire_atom(name, task).fresh();
