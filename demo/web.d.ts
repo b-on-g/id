@@ -46046,6 +46046,13 @@ declare namespace $ {
 declare namespace $ {
     /** Resolves Pointer from Giper ID grant to current data Land */
     function $bog_id_land(this: $, pointer: string): $giper_baza_land | null;
+    /** Has Land got everything that master knows */
+    function $bog_id_land_synced(this: $, str: string): boolean;
+    /** What master really has for Land, asked by separate connection */
+    function $bog_id_land_ask(this: $, master: string, land: $giper_baza_land): Promise<$giper_baza_face_map | null>;
+    /** Sends Lands to master and checks that it really has them */
+    function $bog_id_land_push(this: $, lands: readonly $giper_baza_land[]): Promise<boolean>;
+    function $bog_id_land_covers(left: $giper_baza_face_map, right: $giper_baza_face_map): boolean;
 }
 
 declare namespace $ {

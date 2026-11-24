@@ -46180,6 +46180,18 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    /** Resolves Pointer from Giper ID grant to current data Land */
+    function $bog_id_land(this: $, pointer: string): $giper_baza_land | null;
+    /** Has Land got everything that master knows */
+    function $bog_id_land_synced(this: $, str: string): boolean;
+    /** What master really has for Land, asked by separate connection */
+    function $bog_id_land_ask(this: $, master: string, land: $giper_baza_land): Promise<$giper_baza_face_map | null>;
+    /** Sends Lands to master and checks that it really has them */
+    function $bog_id_land_push(this: $, lands: readonly $giper_baza_land[]): Promise<boolean>;
+    function $bog_id_land_covers(left: $giper_baza_face_map, right: $giper_baza_face_map): boolean;
+}
+
+declare namespace $ {
     /** Seals Giper Baza Auth with passkey secret */
     class $bog_id_vault extends $mol_object2 {
         static secret(key: Uint8Array<ArrayBuffer>): $mol_crypto2_secret;
@@ -46366,167 +46378,172 @@ declare namespace $ {
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_major__title_bog_id_app_31 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_31 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_paragraph['title'] >
+	>
+	type $mol_button_major__title_bog_id_app_32 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve_title'] >
 		,
 		ReturnType< $mol_button_major['title'] >
 	>
-	type $mol_button_major__enabled_bog_id_app_32 = $mol_type_enforce<
+	type $mol_button_major__enabled_bog_id_app_33 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve_enabled'] >
 		,
 		ReturnType< $mol_button_major['enabled'] >
 	>
-	type $mol_button_major__click_bog_id_app_33 = $mol_type_enforce<
+	type $mol_button_major__click_bog_id_app_34 = $mol_type_enforce<
 		ReturnType< $bog_id_app['approve'] >
 		,
 		ReturnType< $mol_button_major['click'] >
 	>
-	type $mol_button_minor__title_bog_id_app_34 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_35 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_35 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_36 = $mol_type_enforce<
 		ReturnType< $bog_id_app['reject'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_list__rows_bog_id_app_36 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_37 = $mol_type_enforce<
 		ReturnType< $bog_id_app['login_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_paragraph__title_bog_id_app_37 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_38 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_string__hint_bog_id_app_38 = $mol_type_enforce<
+	type $mol_string__hint_bog_id_app_39 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_string['hint'] >
 	>
-	type $mol_string__value_bog_id_app_39 = $mol_type_enforce<
+	type $mol_string__value_bog_id_app_40 = $mol_type_enforce<
 		ReturnType< $bog_id_app['name'] >
 		,
 		ReturnType< $mol_string['value'] >
 	>
-	type $bog_id_row__name_bog_id_app_40 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_41 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_bind_title'] >
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_41 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_42 = $mol_type_enforce<
 		ReturnType< $bog_id_app['bind_note'] >
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_42 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_43 = $mol_type_enforce<
 		ReturnType< $bog_id_app['passkey_bind'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_43 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_44 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $mol_paragraph__title_bog_id_app_44 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_45 = $mol_type_enforce<
 		ReturnType< $bog_id_app['bind_status'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $bog_id_row__name_bog_id_app_45 = $mol_type_enforce<
+	type $bog_id_row__name_bog_id_app_46 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['name'] >
 	>
-	type $bog_id_row__note_bog_id_app_46 = $mol_type_enforce<
+	type $bog_id_row__note_bog_id_app_47 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $bog_id_row['note'] >
 	>
-	type $bog_id_row__click_bog_id_app_47 = $mol_type_enforce<
+	type $bog_id_row__click_bog_id_app_48 = $mol_type_enforce<
 		ReturnType< $bog_id_app['account_exit'] >
 		,
 		ReturnType< $bog_id_row['click'] >
 	>
-	type $bog_id_row__face_bog_id_app_48 = $mol_type_enforce<
+	type $bog_id_row__face_bog_id_app_49 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $bog_id_row['face'] >
 	>
-	type $mol_list__rows_bog_id_app_49 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_50 = $mol_type_enforce<
 		ReturnType< $bog_id_app['profile_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_paragraph__title_bog_id_app_50 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_51 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_paragraph__title_bog_id_app_51 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_52 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_title'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_minor__title_bog_id_app_52 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_53 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__enabled_bog_id_app_53 = $mol_type_enforce<
+	type $mol_button_minor__enabled_bog_id_app_54 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_active'] >
 		,
 		ReturnType< $mol_button_minor['enabled'] >
 	>
-	type $mol_button_minor__click_bog_id_app_54 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_55 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_revoke'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_view__sub_bog_id_app_55 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_56 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_paragraph__title_bog_id_app_56 = $mol_type_enforce<
+	type $mol_paragraph__title_bog_id_app_57 = $mol_type_enforce<
 		ReturnType< $bog_id_app['app_title'] >
 		,
 		ReturnType< $mol_paragraph['title'] >
 	>
-	type $mol_button_minor__title_bog_id_app_57 = $mol_type_enforce<
+	type $mol_button_minor__title_bog_id_app_58 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_button_minor['title'] >
 	>
-	type $mol_button_minor__click_bog_id_app_58 = $mol_type_enforce<
+	type $mol_button_minor__click_bog_id_app_59 = $mol_type_enforce<
 		ReturnType< $bog_id_app['app_revoke'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_view__sub_bog_id_app_59 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_60 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_list__rows_bog_id_app_60 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_61 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_parts'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_id_app_61 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_62 = $mol_type_enforce<
 		ReturnType< $bog_id_app['grant_rows'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_bog_id_app_62 = $mol_type_enforce<
+	type $mol_list__rows_bog_id_app_63 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_view__sub_bog_id_app_63 = $mol_type_enforce<
+	type $mol_view__sub_bog_id_app_64 = $mol_type_enforce<
 		ReturnType< $bog_id_app['panels'] >
 		,
 		ReturnType< $mol_view['sub'] >
@@ -46566,6 +46583,7 @@ declare namespace $ {
 		consent_text( ): string
 		Consent_text( ): $mol_paragraph
 		Consent_self( ): $mol_paragraph
+		Consent_wait( ): $mol_paragraph
 		approve_title( ): string
 		approve_enabled( ): boolean
 		approve( next?: any ): any
@@ -46650,6 +46668,8 @@ declare namespace $.$$ {
     };
     class $bog_id_app extends $.$bog_id_app {
         auto(): void;
+        holding(): $giper_baza_land[];
+        hold_lands(): $giper_baza_land[];
         glob(): typeof $giper_baza_glob;
         profile(auto?: 'auto'): $bog_id_profile | null;
         lord(): string;
@@ -46701,10 +46721,13 @@ declare namespace $.$$ {
         consent_text(): string;
         approve_title(): string;
         name_apply(): void;
+        synced(): boolean;
         approve_enabled(): boolean;
         approve(): void;
         reject(): void;
         grant_send(): void;
+        grant_upload(pointer: string): Promise<void>;
+        upload_lands(pointer: string): $giper_baza_land[];
         grant_save(): {
             origin: string;
             lord: string;

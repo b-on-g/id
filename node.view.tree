@@ -245,6 +245,8 @@ $bog_id_app $mol_scroll
 							title <= consent_text \
 						<= Consent_self $mol_paragraph
 							title @ \Это ваш собственный ключ: войдите из приложения с отдельным ключом
+						<= Consent_wait $mol_paragraph
+							title @ \Ждём данные аккаунта из Гипер Базы…
 						<= Approve $mol_button_major
 							title <= approve_title \
 							enabled <= approve_enabled true

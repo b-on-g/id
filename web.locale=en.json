@@ -3,6 +3,7 @@
 	"$bog_id_app_App_revoke_title": "Отозвать",
 	"$bog_id_app_Back_title": "Назад",
 	"$bog_id_app_Consent_self_title": "Это ваш собственный ключ: войдите из приложения с отдельным ключом",
+	"$bog_id_app_Consent_wait_title": "Ждём данные аккаунта из Гипер Базы…",
 	"$bog_id_app_Draft_hint": "Как вас зовут",
 	"$bog_id_app_Enter_name": "Войти по биометрии",
 	"$bog_id_app_Enter_note": "Отпечаток, лицо или ключ доступа",

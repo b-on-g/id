@@ -17247,6 +17247,11 @@ var $;
 			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Consent_self_title")));
 			return obj;
 		}
+		Consent_wait(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.$.$mol_locale.text("$bog_id_app_Consent_wait_title")));
+			return obj;
+		}
 		approve_title(){
 			return "";
 		}
@@ -17287,6 +17292,7 @@ var $;
 				(this.Draft()), 
 				(this.Consent_text()), 
 				(this.Consent_self()), 
+				(this.Consent_wait()), 
 				(this.Approve()), 
 				(this.Reject())
 			];
@@ -17557,6 +17563,7 @@ var $;
 	($mol_mem(($.$bog_id_app.prototype), "Draft"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_text"));
 	($mol_mem(($.$bog_id_app.prototype), "Consent_self"));
+	($mol_mem(($.$bog_id_app.prototype), "Consent_wait"));
 	($mol_mem(($.$bog_id_app.prototype), "approve"));
 	($mol_mem(($.$bog_id_app.prototype), "Approve"));
 	($mol_mem(($.$bog_id_app.prototype), "reject"));
@@ -17617,6 +17624,78 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Resolves Pointer from Giper ID grant to current data Land */
+    function $bog_id_land(pointer) {
+        const glob = this.$giper_baza_glob;
+        const link = glob.Land(new $giper_baza_link(pointer)).Data($giper_baza_atom_text).val();
+        return link ? glob.Land(new $giper_baza_link(link)) : null;
+    }
+    $.$bog_id_land = $bog_id_land;
+    /** Has Land got everything that master knows */
+    function $bog_id_land_synced(str) {
+        const link = new $giper_baza_link(str);
+        const glob = this.$giper_baza_glob;
+        const land = glob.Land(link);
+        land.sync();
+        const faces = glob.yard().masters().map(port => glob.yard().face_port_land([port, link]));
+        this.$mol_state_time.now(500);
+        return faces.some(map => map && $bog_id_land_covers(land.faces, map));
+    }
+    $.$bog_id_land_synced = $bog_id_land_synced;
+    /** What master really has for Land, asked by separate connection */
+    function $bog_id_land_ask(master, land) {
+        return new Promise(done => {
+            const socket = new $mol_dom_context.WebSocket(master.replace(/^http/, 'ws'), ['$giper_baza_yard_2']);
+            socket.binaryType = 'arraybuffer';
+            const finish = (faces) => {
+                clearTimeout(timer);
+                socket.onopen = socket.onerror = socket.onmessage = null;
+                socket.close();
+                done(faces);
+            };
+            const timer = setTimeout(() => finish(null), 3000);
+            socket.onopen = () => socket.send(land.face_pack().asArray());
+            socket.onerror = () => finish(null);
+            socket.onmessage = event => {
+                if (!event.data?.byteLength)
+                    return;
+                const pack = new $giper_baza_pack(event.data);
+                const part = new Map(pack.parts()).get(land.link().str);
+                if (part)
+                    finish(part.faces);
+            };
+        });
+    }
+    $.$bog_id_land_ask = $bog_id_land_ask;
+    /** Sends Lands to master and checks that it really has them */
+    async function $bog_id_land_push(lands) {
+        const yard = this.$giper_baza_glob.yard();
+        for (let i = 0; i < 4; ++i) {
+            await Promise.all(lands.map(land => $mol_wire_async(land).units_saving()));
+            const master = yard.master_current();
+            const faces = await Promise.all(lands.map(land => this.$bog_id_land_ask(master, land)));
+            if (lands.every((land, at) => faces[at] && $bog_id_land_covers(faces[at], land.faces)))
+                return true;
+            if (i)
+                yard.reconnects(null);
+            await new Promise(done => setTimeout(done, 800));
+        }
+        return false;
+    }
+    $.$bog_id_land_push = $bog_id_land_push;
+    function $bog_id_land_covers(left, right) {
+        return [...right].every(([peer, face]) => {
+            const own = left.get(peer);
+            return (own?.time_tick ?? 0) >= face.time_tick && (own?.summ ?? 0) >= face.summ;
+        });
+    }
+    $.$bog_id_land_covers = $bog_id_land_covers;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     /** Seals Giper Baza Auth with passkey secret */
     class $bog_id_vault extends $mol_object2 {
         static secret(key) {
@@ -17651,8 +17730,18 @@ var $;
             auto() {
                 this.profile();
                 this.grants();
+                this.holding();
                 this.listening();
                 this.restoring();
+            }
+            holding() {
+                return this.hold_lands().map(land => land.sync());
+            }
+            hold_lands() {
+                const home = this.glob().Land(new $giper_baza_link(this.lord()));
+                const stores = this.stores().map(store => store.land());
+                const grants = this.grants().flatMap(grant => [this.grant_pointer(grant), ...this.grant_lands(grant)]);
+                return [home, ...stores, ...grants];
             }
             glob() {
                 return this.$.$giper_baza_glob;
@@ -17781,6 +17870,7 @@ var $;
                         ...this.name() ? [] : [this.Draft()],
                         this.Consent_text(),
                         ...this.request_self() ? [this.Consent_self()] : [],
+                        ...this.request_self() || this.synced() ? [] : [this.Consent_wait()],
                         this.Approve(),
                         this.Reject(),
                     ] : [],
@@ -17911,8 +18001,20 @@ var $;
                 if (draft)
                     this.name(draft);
             }
+            synced() {
+                try {
+                    return this.hold_lands()
+                        .map(land => this.$.$bog_id_land_synced(land.link().str))
+                        .every(Boolean);
+                }
+                catch (error) {
+                    if (!$mol_promise_like(error))
+                        $mol_fail_log(error);
+                    return false;
+                }
+            }
             approve_enabled() {
-                return Boolean(this.request_pass()) && !this.request_self();
+                return Boolean(this.request_pass()) && !this.request_self() && this.synced();
             }
             approve() {
                 this.name_apply();
@@ -17928,8 +18030,19 @@ var $;
             grant_send() {
                 const sent = this.grant_save();
                 const { origin, ...data } = sent;
+                $mol_wire_sync(this).grant_upload(data.pointer);
                 this.$.$mol_dom_context.opener?.postMessage({ bog_id: 'grant', ...data }, origin);
                 this.request(null);
+            }
+            async grant_upload(pointer) {
+                const lands = await $mol_wire_async(this).upload_lands(pointer);
+                await this.$.$bog_id_land_push(lands);
+            }
+            upload_lands(pointer) {
+                const home = this.glob().Land(new $giper_baza_link(this.lord()));
+                const stores = this.stores().map(store => store.land());
+                const land = this.$.$bog_id_land(pointer);
+                return [home, ...stores, this.glob().Land(new $giper_baza_link(pointer)), ...land ? [land] : []];
             }
             grant_save() {
                 const { origin, app, scope } = this.request();
@@ -18159,6 +18272,9 @@ var $;
         }
         __decorate([
             $mol_mem
+        ], $bog_id_app.prototype, "holding", null);
+        __decorate([
+            $mol_mem
         ], $bog_id_app.prototype, "lord", null);
         __decorate([
             $mol_action
@@ -18181,6 +18297,9 @@ var $;
         __decorate([
             $mol_action
         ], $bog_id_app.prototype, "name_apply", null);
+        __decorate([
+            $mol_mem
+        ], $bog_id_app.prototype, "synced", null);
         __decorate([
             $mol_action
         ], $bog_id_app.prototype, "grant_ensure", null);
@@ -24425,13 +24544,25 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    /** Resolves Pointer from Giper ID grant to current data Land */
-    function $bog_id_land(pointer) {
-        const glob = this.$giper_baza_glob;
-        const link = glob.Land(new $giper_baza_link(pointer)).Data($giper_baza_atom_text).val();
-        return link ? glob.Land(new $giper_baza_link(link)) : null;
-    }
-    $.$bog_id_land = $bog_id_land;
+    $mol_test({
+        'land covers faces only when it has the latest time and all units of every peer'() {
+            const master = new $giper_baza_face_map;
+            const land = new $giper_baza_face_map;
+            $mol_assert_equal($bog_id_land_covers(land, master), true);
+            master.peer_time('peer', 2, 1);
+            $mol_assert_equal($bog_id_land_covers(land, master), false);
+            land.peer_time('peer', 2, 0);
+            $mol_assert_equal($bog_id_land_covers(land, master), false);
+            land.peer_time('peer', 2, 1);
+            land.peer_time('other', 3, 0);
+            $mol_assert_equal($bog_id_land_covers(land, master), true);
+            master.peer_summ('peer', 2);
+            land.peer_summ('peer', 1);
+            $mol_assert_equal($bog_id_land_covers(land, master), false);
+            land.peer_summ('peer', 2);
+            $mol_assert_equal($bog_id_land_covers(land, master), true);
+        },
+    });
 })($ || ($ = {}));
 
 ;

@@ -321,6 +321,7 @@
     "$mol_button_major",
     "$mol_icon_logout",
     "$bog_id_account",
+    "$bog_id_land",
     "$bog_id_vault",
     "$bog_passkey_secret",
     "$bog_passkey",

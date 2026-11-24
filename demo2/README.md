@@ -40,6 +40,7 @@ const land = $bog_id_land( pointer )
 - `bog/id` схема: `$bog_id_grant`, `$bog_id_store`, `$bog_id_profile`
 - `bog/id/login` функция входа для приложения
 - `bog/id/land` указатель → ленд данных
+- `bog/id/key` один ключ приложения на все устройства
 - `bog/id/profile` публичный профиль лорда
 - `bog/id/vault` шифрование корневого ключа секретом passkey
 - `bog/id/account` аккаунты этого устройства
@@ -52,4 +53,8 @@ const land = $bog_id_land( pointer )
 
 ## Свой ключ на общем origin
 
-Подключить `include \/bog/id/path` в `meta.tree` приложения. Ключ ляжет в `localStorage` под `$giper_baza_auth:<папка страницы>`.
+Подключить `include \/bog/id/path` в `meta.tree` приложения. Ключ ляжет в `localStorage` под `$giper_baza_auth:<папка страницы>`. В корне домена остаётся обычный `$giper_baza_auth`.
+
+## Один ключ приложения на всех устройствах
+
+`$bog_id_key( pointer, own )` хранит ключ приложения в выданном ленде: первое устройство кладёт свой, остальные получают его и ставят через `$giper_baza_auth.current( auth )`. Пока ленд не догнал мастера, возвращает пустую строку. Отзыв не отбирает уже полученный ключ: он закрывает только ленд.
