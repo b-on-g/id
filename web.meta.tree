@@ -247,4 +247,3 @@
 	deploy \/giper/baza/diagram/jepsen.png
 \/bog/id/app
 	include \/bog/id/yard
-	include \/bog/id/auth

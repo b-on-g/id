@@ -247,4 +247,3 @@
 	include \/mol/view/tree/test
 \/bog/id/app
 	include \/bog/id/yard
-	include \/bog/id/auth

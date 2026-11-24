@@ -46227,17 +46227,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    /** Giper ID key in own slot. Shared key of domain is only read */
-    class $bog_id_auth extends $giper_baza_auth {
-        static restore(slot: string): $bog_id_auth | null;
-        /** Was this key already used as Giper ID account on this device */
-        static used(lord: string): boolean;
-        static first(): $giper_baza_auth;
-        static current(next?: $giper_baza_auth | null): $giper_baza_auth;
-    }
-}
-
-declare namespace $ {
 
 	type $bog_theme_auto__theme_light_bog_id_app_1 = $mol_type_enforce<
 		string

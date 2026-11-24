@@ -325,8 +325,7 @@
     "$bog_id_vault",
     "$bog_passkey_secret",
     "$bog_passkey",
-    "$bog_id_yard",
-    "$bog_id_auth"
+    "$bog_id_yard"
   ],
   "dependencies": {
     "autoinstall": "*",
