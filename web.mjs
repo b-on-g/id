@@ -31966,10 +31966,7 @@ var $;
             if (!cred)
                 $mol_fail(new Error('Passkey was not created'));
             const ext = cred.getClientExtensionResults();
-            if (!ext.prf?.enabled) {
-                $mol_fail(new Error('This device or browser does not support PRF'));
-            }
-            const first = ext.prf.results?.first;
+            const first = ext.prf?.results?.first;
             return {
                 id: new Uint8Array(cred.rawId),
                 key: first ? new Uint8Array(first) : null,
@@ -32548,11 +32545,21 @@ var $;
                     try {
                         return (await Secret.get(this.passkey_salt(), id)).key;
                     }
-                    catch {
-                        return $mol_fail(new Error(this.passkey_again()));
+                    catch (error) {
+                        if (error.name === 'NotAllowedError')
+                            return $mol_fail(new Error(this.passkey_again()));
+                        this.passkey_id = null;
+                        return $mol_fail(error);
                     }
                 }
-                return (await Secret.get(this.passkey_salt(), this.passkey_id)).key;
+                try {
+                    return (await Secret.get(this.passkey_salt(), this.passkey_id)).key;
+                }
+                catch (error) {
+                    if (error.name !== 'NotAllowedError')
+                        this.passkey_id = null;
+                    return $mol_fail(error);
+                }
             }
             vault_add(vault) {
                 const last = this.vault().split(' ').filter(Boolean).slice(-4);
@@ -32691,7 +32698,18 @@ var $;
         const line = {
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '.5rem',
+            minWidth: 0,
             padding: { left: '.75rem' },
+        };
+        const text = {
+            flex: { grow: 1, shrink: 1, basis: 0 },
+            minWidth: 0,
+            overflowWrap: 'anywhere',
+        };
+        const action = {
+            flex: { shrink: 0 },
+            whiteSpace: 'nowrap',
         };
         const field = {
             padding: { top: '.75rem', bottom: '.75rem', left: '1rem', right: '1rem' },
@@ -32743,8 +32761,10 @@ var $;
             Bind_status: note,
             Grant_head: line,
             App: line,
-            Grant_title: { wordBreak: 'break-word' },
-            App_title: { color: $mol_theme.shade, font: { size: '.8125rem' } },
+            Grant_title: text,
+            Grant_revoke: action,
+            App_revoke: action,
+            App_title: { ...text, color: $mol_theme.shade, font: { size: '.8125rem' } },
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
